@@ -6,6 +6,8 @@ const svTwitter3 = require('./sv_twitter3/sv_twitter3.service.js');
 const svTwitter4 = require('./sv_twitter4/sv_twitter4.service.js');
 const svTwitter5 = require('./sv_twitter5/sv_twitter5.service.js');
 const svWithLogin = require('./sv-with-login/sv-with-login.service.js');
+const svTwitter6 = require('./sv_twitter6/sv_twitter6.service.js');
+const svabcd = require('./svabcd/svabcd.service.js');
 // eslint-disable-next-line no-unused-vars
 module.exports = function (app) {
   app.configure(users);
@@ -14,6 +16,8 @@ module.exports = function (app) {
   app.configure(followed);
   //app.configure(svTwitter3);
   //app.configure(svTwitter4);
-  app.configure(svTwitter5);
+  //app.configure(svTwitter5);
   app.configure(svWithLogin);
+  app.configure(svTwitter6);
+  app.configure(svabcd);
 };
