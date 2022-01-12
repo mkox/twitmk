@@ -91,14 +91,19 @@ exports.SvTwitter7 = class SvTwitter7 extends Service {
                 this.app = app;
             }
             */
+            /*
             //console.log('sv_twitter7 - x200');
             const serviceFollowed = this.app.service('followed');
             //console.log('sv_twitter7 - x205');
             const followedUser = await client.v2.user(idOfFollowedUser, { 'user.fields': userFields }); // 14 calls + 1 = 15
             //console.log(followedUser);
             serviceFollowed._create({twUserId: idOfFollowedUser, twUserName: followedUser.data.username, twUser: followedUser.data});
+            */
             // Before ".create": find out, of user already exists in collection.
             // Create transaction
+
+            const serviceFollowed = this.app.service('followed');
+            serviceFollowed.create(data, params);
                    
         } catch (err) {
             console.error(err.message)
