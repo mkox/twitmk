@@ -45,6 +45,7 @@ exports.SvTwitter7 = class SvTwitter7 extends Service {
             var users;
             var nextToken;
             var upsertItem;
+            var bulk;
             
             /*
             //console.log('this.app:');
@@ -81,6 +82,23 @@ exports.SvTwitter7 = class SvTwitter7 extends Service {
                 }
                 users = followersAsPaginator._realData.data;
                 //console.log(users);
+
+                bulk = [];
+                for (let i = 0; i < users.length; i++) {
+                    //let bulkItem = {updateOne: {}};
+                    bulk.push(
+                        {
+                            updateOne: {
+                                filter: { twUserId: users[i].id },
+                                update: { twUserId: users[i].id, twUser: users[i], $addToSet: { followedIds: idOfFollowedUser } },
+                                upsert: true
+                            }
+                        }
+                    );
+                }
+                var bulkRes = await this.options.Model.bulkWrite(bulk);
+                console.log('bulkRes.upsertedCount: ' + bulkRes.upsertedCount);
+                console.log('bulkRes.modifiedCount: ' + bulkRes.modifiedCount);
         
                 for (let i = 0; i < users.length; i++) {
                     //this._create({twUserId: users[i].id, twUser: users[i], followedIds: [idOfFollowedUser]});
