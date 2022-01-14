@@ -85,7 +85,7 @@ exports.SvTwitter7 = class SvTwitter7 extends Service {
                 for (let i = 0; i < users.length; i++) {
                     //this._create({twUserId: users[i].id, twUser: users[i], followedIds: [idOfFollowedUser]});
                     //upsertItem = this.options.Model.findOneAndUpdate({twUserId: users[i].id},{twUserId: users[i].id, twUser: users[i], followedIds: [idOfFollowedUser]},{new: true, upsert: true});
-                    upsertItem = await this.options.Model.findOneAndUpdate({twUserId: users[i].id},{twUserId: users[i].id, twUser: users[i], followedIds: [idOfFollowedUser]},{new: true, upsert: true});
+                    upsertItem = await this.options.Model.findOneAndUpdate({twUserId: users[i].id},{twUserId: users[i].id, twUser: users[i], $push: { followedIds: idOfFollowedUser }},{new: true, upsert: true});
                     //console.log('upsertItem: ');
                     //console.log(upsertItem);
                 }
