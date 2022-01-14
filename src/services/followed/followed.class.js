@@ -9,13 +9,13 @@ exports.Followed = class Followed extends Service {
         try {     
             
             var idOfFollowedUser = data.text;
-            console.log(idOfFollowedUser);
+            console.log('followed - idOfFollowedUser: ' + idOfFollowedUser);
             var userFields = 'created_at,description,entities,location,pinned_tweet_id,profile_image_url,protected,public_metrics,url,verified,withheld';
 
             const followedUser = await client.v2.user(idOfFollowedUser, { 'user.fields': userFields });
             //this._create({twUserId: idOfFollowedUser, twUserName: followedUser.data.username, twUser: followedUser.data});
-            var upsertItem = await this.options.Model.findOneAndUpdate({twUserId: users[i].id},{twUserId: idOfFollowedUser, twUserName: followedUser.data.username, twUser: followedUser.data},{upsert: true});
-            upsertItem.save();
+            await this.options.Model.findOneAndUpdate({twUserId: idOfFollowedUser},{twUserId: idOfFollowedUser, twUserName: followedUser.data.username, twUser: followedUser.data},{upsert: true});
+            
         } catch (err) {
             console.error(err.message)
         }
