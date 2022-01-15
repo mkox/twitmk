@@ -24,6 +24,7 @@
     const socket = io('http://localhost:3030');
     // Initialize a Feathers app
     const app = feathers();
+    var followersCount = 0;
     
     // Register socket.io to talk to our server
     app.configure(feathers.socketio(socket));
@@ -43,6 +44,32 @@
 
       messageInput.value = '';
     }
+
+    // Renders a single message on the page
+    function addFollower (follower) {
+      followersCount++;
+      document.getElementById('main').innerHTML += `<p>${followersCount} - ${follower.twUserId} - ${follower.twUser.username}</p>`;
+    }
+    
+    const main = async () => {
+      // Find all existing messages
+      const followers = await app.service('sv-twitter-7').find();
+
+      console.log(followers);
+      var followersData = followers.data;
+
+      // Add existing messages to the list
+      //followers.forEach(addFollower);
+      followersData.forEach(addFollower);
+
+      /*
+      // Add any newly created message to the list in real-time
+      app.service('messages').on('created', addFollower);
+      */
+    };
+
+    main();
+
     /* 
     // Renders a single message on the page
     function addMessage (message) {
