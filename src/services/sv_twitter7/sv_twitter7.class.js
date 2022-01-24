@@ -71,8 +71,12 @@ exports.SvTwitter7 = class SvTwitter7 extends Service {
                 if(pageCounter > 1) await sleep(delay);
                 }
                 followersAsPaginator = await client.v2.followers(idOfFollowedUser, userParams);
-                //console.log(followersAsPaginator);
-                nextToken = followersAsPaginator._realData.meta.next_token;
+                //console.log(followersAsPaginator); 
+                if(followersAsPaginator !== undefined 
+                    && followersAsPaginator._realData !== undefined 
+                    && followersAsPaginator._realData.meta !== undefined ){
+                    nextToken = followersAsPaginator._realData.meta.next_token;
+                }
                 if(nextToken !== undefined && newPage == 1){
                 paginationToken = nextToken;
                 } else if(nextToken == undefined && newPage == 1) {
