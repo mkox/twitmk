@@ -27,6 +27,7 @@
     "test": "npm run lint && npm run mocha",
     "lint": "eslint src/. test/. --config .eslintrc.json --fix",
     "dev": "nodemon src/",
+    "dev2": "node --inspect=0.0.0.0 src/",
     "start": "node src/",
     "mocha": "mocha test/ --recursive --exit"
   },

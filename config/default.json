@@ -28,5 +28,5 @@
       "passwordField": "password"
     }
   },
-  "mongodb": ""
+  "mongodb": "mongodb://mongo:27017/twitmk1"
 }
