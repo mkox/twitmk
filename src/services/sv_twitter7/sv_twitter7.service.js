@@ -6,7 +6,11 @@ const hooks = require('./sv_twitter7.hooks');
 module.exports = function (app) {
   const options = {
     Model: createModel(app),
-    paginate: app.get('paginate')
+    //paginate: app.get('paginate')
+    paginate: {
+      default: 20,
+      max: 50
+    }
   };
 
   // Initialize our service with any options it requires
