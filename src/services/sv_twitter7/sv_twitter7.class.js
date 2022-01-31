@@ -157,6 +157,32 @@ exports.SvTwitter7 = class SvTwitter7 extends Service {
         //console.log('sv_twitter7 - x20');
         return this._getAndStoreTwitterUsers(...args);
     }
+
+    async _findMain(params){
+        var findResult;
+
+        console.log('find - params: ');
+        console.log(params);
+
+        console.log('find - x120');
+        //return await this.Model.aggregate.sample(3);
+        //return await this.options.Model.aggregate.sample(3);
+        //return await this.app.service('sv-twitter-7').Model.aggregate.sample(3);
+        //return await this.app.service('sv-twitter-7').Model.aggregate([{$sample: {size: 3 }}]).toArray();
+        //return await this.options.Model.aggregate([{$sample: {size: 3 }}]).toArray();
+        //return await this.options.Model.aggregate();
+        //return await this.options.Model.aggregate({ $sample: { size: 3 } });
+        findResult = await this.options.Model.aggregate([{ $sample: { size: 3 } }]);
+        console.log('find - x130');
+        console.log('findResult: ');
+        console.log(findResult);
+        return findResult;
+    }
+
+    find(...args){
+        console.log('find - x100');
+        return this._findMain(...args);
+    }
     
     setup(app) {
         //console.log('sv_twitter7 - x15');
