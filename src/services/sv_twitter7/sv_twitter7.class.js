@@ -15,21 +15,21 @@ exports.SvTwitter7 = class SvTwitter7 extends Service {
         /*
               console.log('data:' + data);
               console.log('data.text:' + data.text);
+              console.log('data.maxResults:' + data.maxResults);
               console.log('params.query:' + params.query);
               var quer = params.query;
               for (let x in quer) {
                 console.log(quer[x]);
               } 
               console.log('params:' + params);
-              */
-        
+        */
         try {
             //var idOfFollowedUser = '56060605'; // @michaelkox
             //var idOfFollowedUser = '26044503'; // @attacd
             var idOfFollowedUser = data.text;
 
             console.log('idOfFollowedUser:' + idOfFollowedUser);
-            var maxResults = 10;
+            var maxResults = data.maxResults;
             var paginationToken = '';
             var newPage = 1;
             var pageCounter = 0;
@@ -113,37 +113,8 @@ exports.SvTwitter7 = class SvTwitter7 extends Service {
                 //newPage = 0; //here only for tests
             } while (newPage == 1);
             
-            //console.log(followersOfJackAsPaginator);
-            //service.create({text: JSON.stringify(followersOfJackAsPaginator)});
-            
-            
-            // get infos of followed user
-            //const serviceFollowed = app.service('followed');
-            //const serviceFollowed = this.service('followed'); 
-            //const serviceFollowed = this.Service('followed'); 
-            //const serviceFollowed = this.Service.require('followed');
-            //this.
-            /*
-            function setup(app) {
-                this.app = app;
-            }
-            */
-            /*
-            //console.log('sv_twitter7 - x200');
-            const serviceFollowed = this.app.service('followed');
-            //console.log('sv_twitter7 - x205');
-            const followedUser = await client.v2.user(idOfFollowedUser, { 'user.fields': userFields }); // 14 calls + 1 = 15
-            //console.log(followedUser);
-            serviceFollowed._create({twUserId: idOfFollowedUser, twUserName: followedUser.data.username, twUser: followedUser.data});
-            */
-            // Before ".create": find out, of user already exists in collection.
-            // Create transaction
-
-            
             const serviceFollowed = this.app.service('followed');
             serviceFollowed.create(data, params);
-            
-            
                    
         } catch (err) {
             console.error(err.message)
@@ -163,6 +134,8 @@ exports.SvTwitter7 = class SvTwitter7 extends Service {
 
         console.log('find - params: ');
         console.log(params);
+        console.log('params.query.followedUserId: ');
+        console.log(params.query.followedUserId);
 
         console.log('find - x120');
         //return await this.Model.aggregate.sample(3);
@@ -172,7 +145,10 @@ exports.SvTwitter7 = class SvTwitter7 extends Service {
         //return await this.options.Model.aggregate([{$sample: {size: 3 }}]).toArray();
         //return await this.options.Model.aggregate();
         //return await this.options.Model.aggregate({ $sample: { size: 3 } });
-        findResult = await this.options.Model.aggregate([{ $sample: { size: 3 } }]);
+        findResult = await this.options.Model.aggregate([
+            { $match : { followedIds: { $in: [ params.query.followedUserId ] } }},
+            { $sample: { size: 25 } }
+        ]);
         console.log('find - x130');
         console.log('findResult: ');
         console.log(findResult);
