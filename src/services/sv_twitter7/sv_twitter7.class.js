@@ -138,17 +138,13 @@ exports.SvTwitter7 = class SvTwitter7 extends Service {
         console.log(params.query.followedUserId);
 
         console.log('find - x120');
-        //return await this.Model.aggregate.sample(3);
-        //return await this.options.Model.aggregate.sample(3);
-        //return await this.app.service('sv-twitter-7').Model.aggregate.sample(3);
-        //return await this.app.service('sv-twitter-7').Model.aggregate([{$sample: {size: 3 }}]).toArray();
-        //return await this.options.Model.aggregate([{$sample: {size: 3 }}]).toArray();
-        //return await this.options.Model.aggregate();
-        //return await this.options.Model.aggregate({ $sample: { size: 3 } });
+        
         findResult = await this.options.Model.aggregate([
             { $match : { followedIds: { $in: [ params.query.followedUserId ] } }},
-            { $sample: { size: 25 } }
+            { $match : { 'twUser.public_metrics.followers_count': { $gte: parseInt(params.query.minimumOfFollowers) }} },
+            { $sample: { size: parseInt(params.query.numberOfUsers) } }
         ]);
+        
         console.log('find - x130');
         console.log('findResult: ');
         console.log(findResult);
