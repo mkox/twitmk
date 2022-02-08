@@ -13,7 +13,7 @@
     <h2>Store followers of a single user:</h2>
     <form class="form" onsubmit="svTwitter(event.preventDefault())">
       <input type="text" id="max-follower-per-twittercall" value="1000"> (used for testing, should normally be 1000)<br>
-      <input type="text" id="message-text" placeholder="Enter user id here">
+      <input type="text" id="message-text" placeholder="Enter user id here"><br>
       <button type="submit" class="button button-primary">Send user id</button>
     </form>
 
@@ -24,6 +24,8 @@
           </select><br>
           <label for="minimum-of-followers">Minimum of followers:</label>
           <input type="text" id="minimum-of-followers" value="10"><br>
+          Relation "has x followers" to "is following x twitter users" is at least:<br>
+          <input type="text" id="follow-ratio-numerator" value="1"> to <input type="text" id="follow-ratio-denominator" value="10"><br>
           <label for="how-much-random-users">How much random users:</label>
           <input type="text" id="how-much-random-users" value="250"><br>
           <button type="submit" class="button button-primary">Get random users</button>
@@ -63,13 +65,17 @@
       followersCount = 0;
       var followedForRandomUsers = document.getElementById('followed-for-random-users');
       var minimumOfFollowers = document.getElementById('minimum-of-followers');
+      var followRatioNumerator = document.getElementById('follow-ratio-numerator');
+      var followRatioDenominator = document.getElementById('follow-ratio-denominator');
       var howMuchRandomUsers = document.getElementById('how-much-random-users');
 
       const followers = await app.service('sv-twitter-7').find({ 
         query: {
           followedUserId: followedForRandomUsers.value,
-          numberOfUsers: howMuchRandomUsers.value,
-          minimumOfFollowers: minimumOfFollowers.value
+          minimumOfFollowers: minimumOfFollowers.value,
+          followRatioNumerator: followRatioNumerator.value,
+          followRatioDenominator: followRatioDenominator.value,
+          numberOfUsers: howMuchRandomUsers.value
         } 
       });
 
