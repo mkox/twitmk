@@ -28,10 +28,13 @@
           <input type="text" id="follow-ratio-numerator" value="1"> to <input type="text" id="follow-ratio-denominator" value="10"><br>
           <label for="how-much-random-users">How much random users:</label>
           <input type="text" id="how-much-random-users" value="250"><br>
+          <label for="how-much-random-users">How much user sites open together:</label>
+          <input type="text" id="how-much-user-sites-together" value="20"><br>
           <button type="submit" class="button button-primary">Get random users</button>
         </form>
     
     <h3>User list:</h3>
+    <div id="buttons-for-multiple-user-sites">Open user pages: </div>
     <div id="user-list"></div>
   </main>
 
@@ -43,6 +46,8 @@
     // Initialize a Feathers app
     const app = feathers();
     var followersCount = 0;
+    var followers;
+    var howMuchUserSitesTogether;
     
     // Register socket.io to talk to our server
     app.configure(feathers.socketio(socket));
@@ -69,7 +74,7 @@
       var followRatioDenominator = document.getElementById('follow-ratio-denominator');
       var howMuchRandomUsers = document.getElementById('how-much-random-users');
 
-      const followers = await app.service('sv-twitter-7').find({ 
+      followers = await app.service('sv-twitter-7').find({ 
         query: {
           followedUserId: followedForRandomUsers.value,
           minimumOfFollowers: minimumOfFollowers.value,
@@ -82,6 +87,36 @@
       console.log(followers);
       followers.forEach(addFollower);
 
+      var howMuchUserSitesTogether_raw = document.getElementById('how-much-user-sites-together');
+      howMuchUserSitesTogether = howMuchUserSitesTogether_raw.value;
+      createButtonsToOpenMultipleUserSites();
+
+    }
+
+    function createButtonsToOpenMultipleUserSites() {
+      for(let i = 1; i <= followers.length; i++) {
+        if(i % howMuchUserSitesTogether == 0 || i == followers.length) {
+          document.getElementById('buttons-for-multiple-user-sites').innerHTML += 
+            '<input type=button value="' + i + '" onclick="open_win(this)">';
+        }
+      }
+    }
+
+    function open_win(element) {
+      var maxPages = parseInt(element.value)
+      var minPages;
+      if(maxPages != followers.length) {
+        minPages = maxPages - howMuchUserSitesTogether + 1;
+      } else {
+        minPages = maxPages - (followers.length % howMuchUserSitesTogether) + 1;
+      }
+      for(let i = (minPages - 1); i <= (maxPages - 1); i++) {
+        openSingleWindow (followers[i]);
+      }
+    }
+
+    function openSingleWindow (follower) { 
+      window.open('https://twitter.com/' + follower.twUser.username);
     }
 
     // Renders a single follower on the page
