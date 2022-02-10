@@ -34,7 +34,7 @@
         </form>
     
     <h3>User list:</h3>
-    <div id="buttons-for-multiple-user-sites">Open user pages: </div>
+    <div id="buttons-for-multiple-user-sites">Open user pages:</div>
     <div id="user-list"></div>
   </main>
 
@@ -94,6 +94,7 @@
     }
 
     function createButtonsToOpenMultipleUserSites() {
+      document.getElementById('buttons-for-multiple-user-sites').innerHTML = 'Open user pages: ';
       for(let i = 1; i <= followers.length; i++) {
         if(i % howMuchUserSitesTogether == 0 || i == followers.length) {
           document.getElementById('buttons-for-multiple-user-sites').innerHTML += 
