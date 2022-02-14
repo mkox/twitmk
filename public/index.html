@@ -98,12 +98,19 @@
       for(let i = 1; i <= followers.length; i++) {
         if(i % howMuchUserSitesTogether == 0 || i == followers.length) {
           document.getElementById('buttons-for-multiple-user-sites').innerHTML += 
-            '<input type=button value="' + i + '" onclick="open_win(this)">';
+            '<input class="button-user-sites" type=button value="' + i + '" onclick="open_win(this)">';
         }
       }
     }
 
     function open_win(element) {
+      //console.log('open_win element: ');
+      //console.log(element);
+      var buttonCollection = document.getElementsByClassName('button-user-sites');
+      for (let i = 0; i < buttonCollection.length; i++) {
+        buttonCollection[i].style.backgroundColor = '';
+      }
+      element.style.backgroundColor = 'red';
       var maxPages = parseInt(element.value)
       var minPages;
       if(maxPages != followers.length) {
