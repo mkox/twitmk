@@ -4,6 +4,8 @@ services:
     restart: always
     build: .
     command: /usr/src/app/node_modules/.bin/nodemon ./src/
+    environment:
+      - mongoo1_twitterBearerToken=${mongoo1_twitterBearerToken}
     ports:
       - 3030:3030
     volumes:

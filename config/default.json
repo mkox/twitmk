@@ -28,5 +28,6 @@
       "passwordField": "password"
     }
   },
-  "mongodb": "mongodb://mongo:27017/twitmk1"
+  "mongodb": "mongodb://mongo:27017/twitmk1",
+  "twitterBearerToken": "AAAAAAAAAAAAAAAAAAAAAP75WQEAAAAAz234kFMfrcLB141lLUEsobQW538%3DmJjK1OpiBxQOmgkjkcUvCr7NPCQfSM0PneqPFFOVZIlIe3ERfM"
 }

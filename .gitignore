@@ -112,3 +112,6 @@ data/
 
 # Visual Studio Code
 .vscode
+
+# Environment variables
+.env

@@ -2,7 +2,8 @@ const { Service } = require('feathers-mongoose');
 
 const { TwitterApi } = require('twitter-api-v2');
 
-const client = new TwitterApi('AAAAAAAAAAAAAAAAAAAAAP75WQEAAAAAYRBldGF5JE3YbWYGGfN4nlrgJ0o%3DHjdeReX2X8IsseT6u0ex0SGbnUVxOsbJIphTukAdD8Vk3uZbiS');
+const config = require('config');
+const client = new TwitterApi(config.get('twitterBearerToken'));
 
 exports.Followed = class Followed extends Service {
     async _storeTwitterUserFollowed (data, params) {
