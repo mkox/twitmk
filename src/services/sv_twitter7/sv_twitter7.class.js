@@ -132,7 +132,7 @@ exports.SvTwitter7 = class SvTwitter7 extends Service {
 
     async _findMain(params){
         var findResult;
-        var followRatio = parseInt(params.query.followRatioNumerator) / parseInt(params.query.followRatioDenominator);
+        var followRatioResult = parseInt(params.query.followRatioNumerator) / parseInt(params.query.followRatioDenominator);
         var standardFollowerId = this.app.get('standardFollowerId');
         
         console.log('find - params: ');
@@ -142,12 +142,19 @@ exports.SvTwitter7 = class SvTwitter7 extends Service {
 
         console.log('find - x120');
         
+        if(params.query.removeFollowedByStandardFollower === false){
+            standardFollowerId = '0';
+        }
+        if(params.query.followRatio === false){
+            followRatioResult = 0;
+        }
+        
         findResult = await this.options.Model.aggregate([
             { $match : { followedIds: { $in: [ params.query.followedUserId ] } }},
             { $match : { followedIds: { $nin: [ standardFollowerId ] } }},
             { $match : { 'twUser.public_metrics.followers_count': { $gte: parseInt(params.query.minimumOfFollowers) }} },
             { $addFields : { followRatio : { $divide: [ '$twUser.public_metrics.followers_count', '$twUser.public_metrics.following_count' ] } } },
-            { $match : { followRatio: { $gte: followRatio }} },
+            { $match : { followRatio: { $gte: followRatioResult }} },
             { $sample: { size: parseInt(params.query.numberOfUsers) } }
         ]);
         
