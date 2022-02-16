@@ -6,6 +6,7 @@ services:
     command: /usr/src/app/node_modules/.bin/nodemon ./src/
     environment:
       - mongoo1_twitterBearerToken=${mongoo1_twitterBearerToken}
+      - mongoo1_standardFollowerId=${mongoo1_standardFollowerId}
     ports:
       - 3030:3030
     volumes:

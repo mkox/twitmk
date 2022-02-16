@@ -1,4 +1,5 @@
 {
     "twitterBearerToken": "mongoo1_twitterBearerToken",
+    "standardFollowerId": "mongoo1_standardFollowerId",
     "mongodb_NOT_USED": "mongoo1_mongodb"
 }

@@ -133,7 +133,8 @@ exports.SvTwitter7 = class SvTwitter7 extends Service {
     async _findMain(params){
         var findResult;
         var followRatio = parseInt(params.query.followRatioNumerator) / parseInt(params.query.followRatioDenominator);
-
+        var standardFollowerId = this.app.get('standardFollowerId');
+        
         console.log('find - params: ');
         console.log(params);
         console.log('params.query.followedUserId: ');
@@ -143,6 +144,7 @@ exports.SvTwitter7 = class SvTwitter7 extends Service {
         
         findResult = await this.options.Model.aggregate([
             { $match : { followedIds: { $in: [ params.query.followedUserId ] } }},
+            { $match : { followedIds: { $nin: [ standardFollowerId ] } }},
             { $match : { 'twUser.public_metrics.followers_count': { $gte: parseInt(params.query.minimumOfFollowers) }} },
             { $addFields : { followRatio : { $divide: [ '$twUser.public_metrics.followers_count', '$twUser.public_metrics.following_count' ] } } },
             { $match : { followRatio: { $gte: followRatio }} },

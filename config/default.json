@@ -29,5 +29,6 @@
     }
   },
   "mongodb": "mongodb://mongo:27017/twitmk1",
-  "twitterBearerToken": ""
+  "twitterBearerToken": "",
+  "standardFollowerId": ""
 }
