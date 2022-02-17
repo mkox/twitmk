@@ -9,7 +9,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-exports.SvTwitter7 = class SvTwitter7 extends Service {
+exports.Tfollow = class Tfollow extends Service {
     
     async _getAndStoreTwitterUsers (data, params) {
         
@@ -124,9 +124,9 @@ exports.SvTwitter7 = class SvTwitter7 extends Service {
     }
 
     create(...args) {
-        console.log('sv_twitter7 - x10');
+        console.log('tfollow - x10');
         //this.setup();
-        //console.log('sv_twitter7 - x20');
+        //console.log('tfollow - x20');
         return this._getAndStoreTwitterUsers(...args);
     }
 
@@ -170,7 +170,7 @@ exports.SvTwitter7 = class SvTwitter7 extends Service {
     }
     
     setup(app) {
-        //console.log('sv_twitter7 - x15');
+        //console.log('tfollow - x15');
         this.app = app;
         //console.log(this.app);
     }

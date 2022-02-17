@@ -1,9 +1,9 @@
-// sv_twitter7-model.js - A mongoose model
+// tfollow-model.js - A mongoose model
 // 
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 module.exports = function (app) {
-  const modelName = 'svTwitter7';
+  const modelName = 'tfollow';
   const mongooseClient = app.get('mongooseClient');
   const { Schema } = mongooseClient;
   const schema = new Schema({

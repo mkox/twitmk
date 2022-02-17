@@ -58,7 +58,7 @@
       var messageInput = document.getElementById('message-text');
       var maxResults = document.getElementById('max-follower-per-twittercall');
 
-      await app.service('sv-twitter-7').create({
+      await app.service('tfollow').create({
         text: messageInput.value,
         maxResults: maxResults.value
       });
@@ -77,7 +77,7 @@
       var followRatioDenominator = document.getElementById('follow-ratio-denominator');
       var howMuchRandomUsers = document.getElementById('how-much-random-users');
 
-      followers = await app.service('sv-twitter-7').find({ 
+      followers = await app.service('tfollow').find({ 
         query: {
           followedUserId: followedForRandomUsers.value,
           removeFollowedByStandardFollower: removeFollowedByStandardFollower.checked,

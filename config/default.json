@@ -28,7 +28,7 @@
       "passwordField": "password"
     }
   },
-  "mongodb": "mongodb://mongo:27017/twitmk1",
+  "mongodb": "mongodb://mongo:27017/twitmk",
   "twitterBearerToken": "",
   "standardFollowerId": ""
 }
