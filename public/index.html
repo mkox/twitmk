@@ -17,6 +17,11 @@
       <button type="submit" class="button button-primary">Send user id</button>
     </form>
 
+    <h2>Update users you follow:</h2>
+    <form class="form" onsubmit="standardUser_followingUpdate(event.preventDefault())">
+      <button type="submit" class="button button-primary">Update</button>
+    </form>
+
     <h2>Get user list:</h2>
         <form class="form" onsubmit="getRandomFollowers(event.preventDefault())">
           <label for="followed-for-random-users">Get random followers of a single followed:</label>
@@ -60,10 +65,19 @@
 
       await app.service('tfollow').create({
         text: messageInput.value,
-        maxResults: maxResults.value
+        maxResults: maxResults.value,
+        createOption: 1
       });
 
       messageInput.value = '';
+    }
+
+    // Create create or update on users the standard user follows.
+    async function standardUser_followingUpdate () {
+      //console.log('in function standardUser_followingUpdate');
+      await app.service('tfollow').create({
+        createOption: 2
+      });
     }
 
     async function getRandomFollowers () {

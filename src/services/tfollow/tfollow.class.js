@@ -123,11 +123,107 @@ exports.Tfollow = class Tfollow extends Service {
             
     }
 
+    async _getAndStoreFollowersOfStandardUser () {
+        try {
+            var standardFollowerId = this.app.get('standardFollowerId');
+
+            console.log('standardFollowerId:' + standardFollowerId);
+            //var maxResults = data.maxResults;
+            var maxResults = 1000;
+            var paginationToken = '';
+            var newPage = 1;
+            var pageCounter = 0;
+            var requestsLimit = 14; // https://developer.twitter.com/en/docs/twitter-api/rate-limits
+            
+            var delay = 900000; // 15*60*1000 = 960000
+            var followingAsPaginator;
+        
+            var userFields = 'created_at,description,entities,location,pinned_tweet_id,profile_image_url,protected,public_metrics,url,verified,withheld';
+            var userParams = { asPaginator: true, 'max_results': maxResults, 'user.fields': userFields};
+            var users;
+            var nextToken;
+            var upsertItem;
+            var bulk;
+            
+            do {
+                pageCounter++;
+                
+                //if(pageCounter % requestsLimit == 1){
+                //  if(pageCounter > 1) delayTotal+= delayAddition;
+                //}
+                
+                if (paginationToken != '') {
+                userParams.pagination_token = paginationToken;
+                }
+                if(pageCounter % requestsLimit == 1){
+                if(pageCounter > 1) await sleep(delay);
+                }
+                console.log('fos 200');
+                console.log('standardFollowerId: ');
+                console.log(standardFollowerId);
+                console.log('userParams: ');
+                console.log(userParams);
+                followingAsPaginator = await client.v2.following(standardFollowerId, userParams);
+                //followingAsPaginator = await client.v2.following(standardFollowerId);
+                console.log('fos 205');
+                //console.log(followingAsPaginator); 
+                if(followingAsPaginator !== undefined 
+                    && followingAsPaginator._realData !== undefined 
+                    && followingAsPaginator._realData.meta !== undefined ){
+                    nextToken = followingAsPaginator._realData.meta.next_token;
+                }
+                if(nextToken !== undefined && newPage == 1){
+                paginationToken = nextToken;
+                } else if(nextToken == undefined && newPage == 1) {
+                newPage = -1;
+                } else {
+                newPage = 0;
+                }
+                users = followingAsPaginator._realData.data;
+                //console.log(users);
+
+                bulk = [];
+                for (let i = 0; i < users.length; i++) {
+                    //let bulkItem = {updateOne: {}};
+                    bulk.push(
+                        {
+                            updateOne: {
+                                filter: { twUserId: users[i].id },
+                                update: { twUserId: users[i].id, twUser: users[i], $addToSet: { followedIds: standardFollowerId } },
+                                upsert: true
+                            }
+                        }
+                    );
+                }
+                var bulkRes = await this.options.Model.bulkWrite(bulk);
+                console.log('bulkRes.upsertedCount: ' + bulkRes.upsertedCount);
+                console.log('bulkRes.modifiedCount: ' + bulkRes.modifiedCount);
+        
+                for (let i = 0; i < users.length; i++) {
+                    //this._create({twUserId: users[i].id, twUser: users[i], followedIds: [standardFollowerId]});
+                    upsertItem = await this.options.Model.findOneAndUpdate({twUserId: users[i].id},{twUserId: users[i].id, twUser: users[i], $addToSet: { followedIds: standardFollowerId }},{new: true, upsert: true});
+                    //console.log('upsertItem: ');
+                    //console.log(upsertItem);
+                }
+                //newPage = 0; //here only for tests
+            } while (newPage == 1);
+                   
+        } catch (err) {
+            console.error(err.message)
+        }
+    }
+
     create(...args) {
         console.log('tfollow - x10');
+        //console.log('args:');
+        //console.log(args);
         //this.setup();
         //console.log('tfollow - x20');
-        return this._getAndStoreTwitterUsers(...args);
+        if(parseInt(args[0].createOption) === 1 ){
+            return this._getAndStoreTwitterUsers(...args);
+        } else if(parseInt(args[0].createOption) === 2 ){
+            return this._getAndStoreFollowersOfStandardUser();
+        }
     }
 
     async _findMain(params){

@@ -9,7 +9,8 @@ module.exports = function (app) {
   const schema = new Schema({
     twUserId: { type: String, required: true, index: true, unique: true},
     twUser: {},
-    followedIds: [String]
+    followedIds: [String],
+    standardFollower: {}
   }, {
     timestamps: true
   });
