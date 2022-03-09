@@ -104,13 +104,14 @@ exports.Tfollow = class Tfollow extends Service {
                 var bulkRes = await this.options.Model.bulkWrite(bulk);
                 console.log('bulkRes.upsertedCount: ' + bulkRes.upsertedCount);
                 console.log('bulkRes.modifiedCount: ' + bulkRes.modifiedCount);
-        
+                /*
                 for (let i = 0; i < users.length; i++) {
                     //this._create({twUserId: users[i].id, twUser: users[i], followedIds: [idOfFollowedUser]});
                     upsertItem = await this.options.Model.findOneAndUpdate({twUserId: users[i].id},{twUserId: users[i].id, twUser: users[i], $addToSet: { followedIds: idOfFollowedUser }},{new: true, upsert: true});
                     //console.log('upsertItem: ');
                     //console.log(upsertItem);
                 }
+                */
                 //newPage = 0; //here only for tests
             } while (newPage == 1);
             
@@ -126,6 +127,7 @@ exports.Tfollow = class Tfollow extends Service {
     async _getAndStoreFollowersOfStandardUser () {
         try {
             var standardFollowerId = this.app.get('standardFollowerId');
+            //var standardFollowerId = '156561882';
 
             console.log('standardFollowerId:' + standardFollowerId);
             //var maxResults = data.maxResults;
@@ -182,6 +184,8 @@ exports.Tfollow = class Tfollow extends Service {
                 users = followingAsPaginator._realData.data;
                 //console.log(users);
 
+                const date = new Date();
+                let isoDate = date.toISOString();
                 bulk = [];
                 for (let i = 0; i < users.length; i++) {
                     //let bulkItem = {updateOne: {}};
@@ -189,7 +193,8 @@ exports.Tfollow = class Tfollow extends Service {
                         {
                             updateOne: {
                                 filter: { twUserId: users[i].id },
-                                update: { twUserId: users[i].id, twUser: users[i], $addToSet: { followedIds: standardFollowerId } },
+                                //update: { twUserId: users[i].id, twUser: users[i], $addToSet: { 'standardFollower.followOnOrBefore': isoDate }, 'standardFollower.isFollowing': 1 },
+                                update: { twUserId: users[i].id, twUser: users[i], 'standardFollower.followOnOrBefore': isoDate, 'standardFollower.isFollowing': 1  },
                                 upsert: true
                             }
                         }
@@ -198,14 +203,6 @@ exports.Tfollow = class Tfollow extends Service {
                 var bulkRes = await this.options.Model.bulkWrite(bulk);
                 console.log('bulkRes.upsertedCount: ' + bulkRes.upsertedCount);
                 console.log('bulkRes.modifiedCount: ' + bulkRes.modifiedCount);
-        
-                for (let i = 0; i < users.length; i++) {
-                    //this._create({twUserId: users[i].id, twUser: users[i], followedIds: [standardFollowerId]});
-                    upsertItem = await this.options.Model.findOneAndUpdate({twUserId: users[i].id},{twUserId: users[i].id, twUser: users[i], $addToSet: { followedIds: standardFollowerId }},{new: true, upsert: true});
-                    //console.log('upsertItem: ');
-                    //console.log(upsertItem);
-                }
-                //newPage = 0; //here only for tests
             } while (newPage == 1);
                    
         } catch (err) {
