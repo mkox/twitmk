@@ -7,10 +7,11 @@ module.exports = function (app) {
   const options = {
     Model: createModel(app),
     //paginate: app.get('paginate')
-    paginate: {
-      default: 20,
-      max: 50
-    }
+    //paginate: {
+      //default: 20,
+      //max: 50
+    //},
+    whitelist: ['$eq']
   };
 
   // Initialize our service with any options it requires

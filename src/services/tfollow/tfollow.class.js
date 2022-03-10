@@ -184,17 +184,43 @@ exports.Tfollow = class Tfollow extends Service {
                 users = followingAsPaginator._realData.data;
                 //console.log(users);
 
+                //this.app.
+                var usersFollowedByStandardUser = await this._find({ query: { 'standardFollower.isFollowing' : { $eq: 1 }} });
+                //console.log('usersFollowedByStandardUser: ');
+                //console.log(usersFollowedByStandardUser);
+
                 const date = new Date();
                 let isoDate = date.toISOString();
                 bulk = [];
                 for (let i = 0; i < users.length; i++) {
+                    let isoDateFinal = isoDate;
+                    var existingUser = usersFollowedByStandardUser.find(o => o.twUserId === users[i].id);
+                    //console.log('existingUser: ');
+                    //console.log(existingUser);
+                    if(typeof existingUser != 'undefined'){
+                        //console.log('x234');
+                        if(existingUser.standardFollower.followOnOrBefore.length == 24){
+                            //console.log('x234000000000000000');
+                            isoDateFinal = existingUser.standardFollower.followOnOrBefore;
+                        } 
+                        //else {
+                          //  console.log('existingUser.standardFollower.followOnOrBefore: ');
+                          //  console.log(existingUser.standardFollower.followOnOrBefore);
+                        //}
+                    } 
+                    //else {
+                      //  console.log('UNDEFINED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+                    //}
+                    console.log('isoDateFinal: ');
+                    console.log(isoDateFinal);
+
                     //let bulkItem = {updateOne: {}};
                     bulk.push(
                         {
                             updateOne: {
                                 filter: { twUserId: users[i].id },
                                 //update: { twUserId: users[i].id, twUser: users[i], $addToSet: { 'standardFollower.followOnOrBefore': isoDate }, 'standardFollower.isFollowing': 1 },
-                                update: { twUserId: users[i].id, twUser: users[i], 'standardFollower.followOnOrBefore': isoDate, 'standardFollower.isFollowing': 1  },
+                                update: { twUserId: users[i].id, twUser: users[i], 'standardFollower.followOnOrBefore': isoDateFinal, 'standardFollower.isFollowing': 1  },
                                 upsert: true
                             }
                         }
