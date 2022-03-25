@@ -27,7 +27,8 @@
           <label for="followed-for-random-users">Get random followers of a single followed:</label>
           <select id="followed-for-random-users" name="followed-for-random-users">
           </select><br>
-          <input type="checkbox" id="remove-followed-by-standard-follower" checked> Remove users followed by standard follower.<br />
+          <input type="checkbox" id="remove-followed-by-standard-follower" checked> Remove users already followed by standard follower.<br />
+          <input type="checkbox" id="remove-following-standard-follower" checked> Remove users following the standard follower.<br />
           <label for="minimum-of-followers">Minimum of followers:</label>
           <input type="text" id="minimum-of-followers" value="10"><br>
           <input type="checkbox" id="follow-ratio" checked> Relation "has x followers" to "is following x twitter users" is at least:<br>
@@ -85,6 +86,7 @@
       followersCount = 0;
       var followedForRandomUsers = document.getElementById('followed-for-random-users');
       var removeFollowedByStandardFollower = document.getElementById('remove-followed-by-standard-follower');
+      var removeFollowingStandardFollower = document.getElementById('remove-following-standard-follower');
       var minimumOfFollowers = document.getElementById('minimum-of-followers');
       var followRatio = document.getElementById('follow-ratio');
       var followRatioNumerator = document.getElementById('follow-ratio-numerator');
@@ -95,6 +97,7 @@
         query: {
           followedUserId: followedForRandomUsers.value,
           removeFollowedByStandardFollower: removeFollowedByStandardFollower.checked,
+          removeFollowingStandardFollower: removeFollowingStandardFollower.checked,
           minimumOfFollowers: minimumOfFollowers.value,
           followRatio: followRatio.checked,
           followRatioNumerator: followRatioNumerator.value,

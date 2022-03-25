@@ -96,6 +96,7 @@ exports.Tfollow = class Tfollow extends Service {
                             updateOne: {
                                 filter: { twUserId: users[i].id },
                                 update: { twUserId: users[i].id, twUser: users[i], $addToSet: { followedIds: idOfFollowedUser } },
+                                //update: { twUserId: users[i].id, twUser: users[i], $addToSet: { followedIds: idOfFollowedUser }, 'standardFollower.isFollowing': 0 },
                                 upsert: true
                             }
                         }
@@ -124,7 +125,7 @@ exports.Tfollow = class Tfollow extends Service {
             
     }
 
-    async _getAndStoreFollowersOfStandardUser () {
+    async _getAndStoreFollowedByStandardUser () {
         try {
             var standardFollowerId = this.app.get('standardFollowerId');
             //var standardFollowerId = '156561882';
@@ -146,6 +147,7 @@ exports.Tfollow = class Tfollow extends Service {
             var nextToken;
             var upsertItem;
             var bulk;
+            var bulkRemoveFollowing;
             
             do {
                 pageCounter++;
@@ -226,9 +228,34 @@ exports.Tfollow = class Tfollow extends Service {
                         }
                     );
                 }
-                var bulkRes = await this.options.Model.bulkWrite(bulk);
-                console.log('bulkRes.upsertedCount: ' + bulkRes.upsertedCount);
-                console.log('bulkRes.modifiedCount: ' + bulkRes.modifiedCount);
+                if(bulk.length > 0){
+                    var bulkRes = await this.options.Model.bulkWrite(bulk);
+                    console.log('bulkRes.upsertedCount: ' + bulkRes.upsertedCount);
+                    console.log('bulkRes.modifiedCount: ' + bulkRes.modifiedCount);
+                }                
+
+                bulkRemoveFollowing = [];
+                for (let i = 0; i < usersFollowedByStandardUser.length; i++) {
+                    var existingUser = users.find(o => o.id === usersFollowedByStandardUser[i].twUserId);
+
+                    if(typeof existingUser == 'undefined'){
+                        bulkRemoveFollowing.push(
+                            {
+                                updateOne: {
+                                    filter: { twUserId: usersFollowedByStandardUser[i].twUserId },
+                                    update: { 'standardFollower.isFollowing': 0  }
+                                }
+                            }
+                        );
+                    }
+                }
+                if(bulkRemoveFollowing.length > 0){
+                    var bulkRemoveFollowingRes = await this.options.Model.bulkWrite(bulkRemoveFollowing);
+                    console.log('bulkRemoveFollowingRes.upsertedCount: ' + bulkRemoveFollowingRes.upsertedCount);
+                    console.log('bulkRemoveFollowingRes.modifiedCount: ' + bulkRemoveFollowingRes.modifiedCount);
+                }
+
+
             } while (newPage == 1);
                    
         } catch (err) {
@@ -245,7 +272,7 @@ exports.Tfollow = class Tfollow extends Service {
         if(parseInt(args[0].createOption) === 1 ){
             return this._getAndStoreTwitterUsers(...args);
         } else if(parseInt(args[0].createOption) === 2 ){
-            return this._getAndStoreFollowersOfStandardUser();
+            return this._getAndStoreFollowedByStandardUser();
         }
     }
 
@@ -253,6 +280,7 @@ exports.Tfollow = class Tfollow extends Service {
         var findResult;
         var followRatioResult = parseInt(params.query.followRatioNumerator) / parseInt(params.query.followRatioDenominator);
         var standardFollowerId = this.app.get('standardFollowerId');
+        var isFollowingId;
         
         console.log('find - params: ');
         console.log(params);
@@ -262,6 +290,11 @@ exports.Tfollow = class Tfollow extends Service {
         console.log('find - x120');
         
         if(params.query.removeFollowedByStandardFollower === false){
+            isFollowingId = 0;
+        } else {
+            isFollowingId = 1;
+        }
+        if(params.query.removeFollowingStandardFollower === false){
             standardFollowerId = '0';
         }
         if(params.query.followRatio === false){
@@ -271,6 +304,7 @@ exports.Tfollow = class Tfollow extends Service {
         findResult = await this.options.Model.aggregate([
             { $match : { followedIds: { $in: [ params.query.followedUserId ] } }},
             { $match : { followedIds: { $nin: [ standardFollowerId ] } }},
+            { $match : { 'standardFollower.isFollowing': isFollowingId} },
             { $match : { 'twUser.public_metrics.followers_count': { $gte: parseInt(params.query.minimumOfFollowers) }} },
             { $addFields : { followRatio : { $divide: [ '$twUser.public_metrics.followers_count', '$twUser.public_metrics.following_count' ] } } },
             { $match : { followRatio: { $gte: followRatioResult }} },
