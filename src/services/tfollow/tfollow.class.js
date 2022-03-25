@@ -276,7 +276,7 @@ exports.Tfollow = class Tfollow extends Service {
         }
     }
 
-    async _findMain(params){
+    async _findRandomFollowers(params){
         var findResult;
         var followRatioResult = parseInt(params.query.followRatioNumerator) / parseInt(params.query.followRatioDenominator);
         var standardFollowerId = this.app.get('standardFollowerId');
@@ -317,9 +317,51 @@ exports.Tfollow = class Tfollow extends Service {
         return findResult;
     }
 
+    async _getFollowedByDate(params){
+        var findResult;
+
+        const startDate = new Date(params.query.followingStartDate);
+        let isoStartDate = startDate.toISOString();
+        console.log('isoStartDate:');
+        console.log(isoStartDate);
+
+        const endDate = new Date(params.query.followingEndDate);
+        let isoEndDate = endDate.toISOString();
+        console.log('isoEndDate:');
+        console.log(isoEndDate);
+        
+        console.log('find gFBD - params: ');
+        console.log(params);
+
+        console.log('find gFBD - x120');
+        
+        findResult = await this.options.Model.aggregate([
+            { $match : { $and: [
+                { 'standardFollower.isFollowing': 1}, 
+                { 'tempDateStart': { $gte: [ 'standardFollower.followOnOrBefore', isoStartDate ] }},
+                { 'tempDateEnd': { $lte: [ 'standardFollower.followOnOrBefore', isoEndDate ] }}
+            ] } }
+        ]);
+        
+        console.log('find gFBD - x130');
+        console.log('findResult: ');
+        console.log(findResult);
+        return findResult;
+    }
+
     find(...args){
         console.log('find - x100');
-        return this._findMain(...args);
+        //return this._findMain(...args);
+        //console.log('args:');
+        //console.log(args);
+
+        if(parseInt(args[0].query.findOption) === 1 ){
+            return this._findRandomFollowers(...args);
+        } else if(parseInt(args[0].query.findOption) === 2 ){
+            return this._getFollowedByDate(...args);
+        } else {
+            console.log('find - NO OPTION FITS!');
+        }
     }
     
     setup(app) {

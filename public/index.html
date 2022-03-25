@@ -22,23 +22,37 @@
       <button type="submit" class="button button-primary">Update</button>
     </form>
 
-    <h2>Get user list:</h2>
-        <form class="form" onsubmit="getRandomFollowers(event.preventDefault())">
-          <label for="followed-for-random-users">Get random followers of a single followed:</label>
-          <select id="followed-for-random-users" name="followed-for-random-users">
-          </select><br>
-          <input type="checkbox" id="remove-followed-by-standard-follower" checked> Remove users already followed by standard follower.<br />
-          <input type="checkbox" id="remove-following-standard-follower" checked> Remove users following the standard follower.<br />
-          <label for="minimum-of-followers">Minimum of followers:</label>
-          <input type="text" id="minimum-of-followers" value="10"><br>
-          <input type="checkbox" id="follow-ratio" checked> Relation "has x followers" to "is following x twitter users" is at least:<br>
-          <input type="text" id="follow-ratio-numerator" value="1"> to <input type="text" id="follow-ratio-denominator" value="10"><br>
-          <label for="how-much-random-users">How much random users:</label>
-          <input type="text" id="how-much-random-users" value="250"><br>
-          <label for="how-much-random-users">How much user sites open together:</label>
-          <input type="text" id="how-much-user-sites-together" value="20"><br>
-          <button type="submit" class="button button-primary">Get random users</button>
-        </form>
+    <table>
+      <tr>
+        <td>
+          <h2>Get user list<br>to follow users:</h2>
+          <form class="form" onsubmit="getRandomFollowers(event.preventDefault())">
+            <label for="followed-for-random-users">Get random followers of a single followed:</label>
+            <select id="followed-for-random-users" name="followed-for-random-users">
+            </select><br>
+            <input type="checkbox" id="remove-followed-by-standard-follower" checked> Remove users already followed by standard follower.<br />
+            <input type="checkbox" id="remove-following-standard-follower" checked> Remove users following the standard follower.<br />
+            <label for="minimum-of-followers">Minimum of followers:</label>
+            <input type="text" id="minimum-of-followers" value="10"><br>
+            <input type="checkbox" id="follow-ratio" checked> Relation "has x followers" to "is following x twitter users" is at least:<br>
+            <input type="text" id="follow-ratio-numerator" value="1"> to <input type="text" id="follow-ratio-denominator" value="10"><br>
+            <label for="how-much-random-users">How much random users:</label>
+            <input type="text" id="how-much-random-users" value="250"><br>
+            <label for="how-much-random-users">How much user sites open together:</label>
+            <input type="text" id="how-much-user-sites-together" value="20"><br>
+            <button type="submit" class="button button-primary">Get random users</button>
+          </form>
+        </td>
+        <td style="vertical-align: text-top;">
+          <h2>Get user list<br>to unfollow users:</h2>
+          <form class="form" onsubmit="getFollowedByDate(event.preventDefault())">
+            Date range for start of following a user:<br>
+            Start: <input type="text" id="following-start-date" placeholder="yyyy-mm-dd"> End: <input type="text" id="following-end-date"  placeholder="yyyy-mm-dd"><br>
+            <button type="submit" class="button button-primary">Get users</button>
+          </form>
+        </td>
+      </tr>
+    </table>
     
     <h3>User list:</h3>
     <div id="buttons-for-multiple-user-sites">Open user pages:</div>
@@ -102,7 +116,31 @@
           followRatio: followRatio.checked,
           followRatioNumerator: followRatioNumerator.value,
           followRatioDenominator: followRatioDenominator.value,
-          numberOfUsers: howMuchRandomUsers.value
+          numberOfUsers: howMuchRandomUsers.value,
+          findOption: 1
+        } 
+      });
+
+      console.log(followers);
+      followers.forEach(addFollower);
+
+      var howMuchUserSitesTogether_raw = document.getElementById('how-much-user-sites-together');
+      howMuchUserSitesTogether = howMuchUserSitesTogether_raw.value;
+      createButtonsToOpenMultipleUserSites();
+
+    }
+
+    async function getFollowedByDate () {
+      document.getElementById('user-list').innerHTML = '';
+      followersCount = 0;
+      var followingStartDate = document.getElementById('following-start-date');
+      var followingEndDate = document.getElementById('following-end-date');
+
+      followers = await app.service('tfollow').find({ 
+        query: {
+          followingStartDate: followingStartDate.value,
+          followingEndDate: followingEndDate.value,
+          findOption: 2
         } 
       });
 
