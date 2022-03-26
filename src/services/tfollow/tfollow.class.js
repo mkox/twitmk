@@ -335,12 +335,20 @@ exports.Tfollow = class Tfollow extends Service {
 
         console.log('find gFBD - x120');
         
+        /*
         findResult = await this.options.Model.aggregate([
             { $match : { $and: [
                 { 'standardFollower.isFollowing': 1}, 
                 { 'tempDateStart': { $gte: [ 'standardFollower.followOnOrBefore', isoStartDate ] }},
                 { 'tempDateEnd': { $lte: [ 'standardFollower.followOnOrBefore', isoEndDate ] }}
             ] } }
+        ]);
+        */
+        
+        findResult = await this.options.Model.aggregate([
+            { $match : { 'standardFollower.isFollowing': 1} },
+            { $match : { 'standardFollower.followOnOrBefore': { $gte: isoStartDate }} },
+            { $match : { 'standardFollower.followOnOrBefore': { $lte: isoEndDate }} }
         ]);
         
         console.log('find gFBD - x130');
