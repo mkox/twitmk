@@ -47,6 +47,7 @@ exports.Tfollow = class Tfollow extends Service {
             var nextToken;
             var upsertItem;
             var bulk;
+            var bulk2;
             
             /*
             //console.log('this.app:');
@@ -105,6 +106,27 @@ exports.Tfollow = class Tfollow extends Service {
                 var bulkRes = await this.options.Model.bulkWrite(bulk);
                 console.log('bulkRes.upsertedCount: ' + bulkRes.upsertedCount);
                 console.log('bulkRes.modifiedCount: ' + bulkRes.modifiedCount);
+
+                /* Only for 'standardFollower.isFollowing' */
+                bulk2 = [];
+                for (let i = 0; i < users.length; i++) {
+                    //let bulkItem = {updateOne: {}};
+                    bulk2.push(
+                        {
+                            updateOne: {
+                                filter: { twUserId: users[i].id, 'standardFollower.isFollowing': {$exists : false} },
+                                update: { $set: {'standardFollower.isFollowing': 0 } }
+                            }
+                        }
+                    );
+                }
+                var bulkRes2 = await this.options.Model.bulkWrite(bulk2);
+                console.log('bulkRes.upsertedCount: ' + bulkRes2.upsertedCount);
+                console.log('bulkRes.modifiedCount: ' + bulkRes2.modifiedCount);
+                
+
+
+
                 /*
                 for (let i = 0; i < users.length; i++) {
                     //this._create({twUserId: users[i].id, twUser: users[i], followedIds: [idOfFollowedUser]});
@@ -280,7 +302,9 @@ exports.Tfollow = class Tfollow extends Service {
         var findResult;
         var followRatioResult = parseInt(params.query.followRatioNumerator) / parseInt(params.query.followRatioDenominator);
         var standardFollowerId = this.app.get('standardFollowerId');
-        var isFollowingId;
+        //var isFollowingId;
+        var isFollowingIds;
+        var excludedFollowerId;
         
         console.log('find - params: ');
         console.log(params);
@@ -288,30 +312,57 @@ exports.Tfollow = class Tfollow extends Service {
         console.log(params.query.followedUserId);
 
         console.log('find - x120');
-        
+        /*
         if(params.query.removeFollowedByStandardFollower === false){
             isFollowingId = 0;
         } else {
             isFollowingId = 1;
         }
-        if(params.query.removeFollowingStandardFollower === false){
-            standardFollowerId = '0';
+        */
+        excludedFollowerId = standardFollowerId;
+        console.log('params.query.removeFollowedByStandardFollower: ' + params.query.removeFollowedByStandardFollower);
+        if(params.query.removeFollowedByStandardFollower === false){
+            isFollowingIds = [0,1];
+            //console.log('find - x125');
+            if(standardFollowerId == params.query.followedUserId) {
+                //console.log('find - x126');
+                excludedFollowerId = '0'; // so not removed through match $nin
+                //console.log('excludedFollowerId: ' + excludedFollowerId);
+            }
+        } else {
+            isFollowingIds = [0]; // so matched are only the not followed by standardFollower
         }
+        //console.log('excludedFollowerId x127b: ' + excludedFollowerId);
+
+        console.log('params.query.removeFollowingStandardFollower: ' + params.query.removeFollowingStandardFollower);
+        if(params.query.removeFollowingStandardFollower === false){
+            //console.log('find - x140');
+            excludedFollowerId = '0';
+        } else {
+            excludedFollowerId = standardFollowerId;
+        }
+
         if(params.query.followRatio === false){
             followRatioResult = 0;
         }
+        //console.log('isFollowingId: ' + isFollowingId);
+        console.log('isFollowingIds: ' + isFollowingIds);
+        console.log('standardFollowerId: ' + standardFollowerId);
+        console.log('followRatioResult: ' + followRatioResult);
+        console.log('excludedFollowerId: ' + excludedFollowerId);
         
         findResult = await this.options.Model.aggregate([
             { $match : { followedIds: { $in: [ params.query.followedUserId ] } }},
-            { $match : { followedIds: { $nin: [ standardFollowerId ] } }},
-            { $match : { 'standardFollower.isFollowing': isFollowingId} },
+            { $match : { followedIds: { $nin: [ excludedFollowerId ] } }},
+            //{ $match : { 'standardFollower.isFollowing': isFollowingId} },
+            { $match : { 'standardFollower.isFollowing': { $in: isFollowingIds }} },
             { $match : { 'twUser.public_metrics.followers_count': { $gte: parseInt(params.query.minimumOfFollowers) }} },
             { $addFields : { followRatio : { $divide: [ '$twUser.public_metrics.followers_count', '$twUser.public_metrics.following_count' ] } } },
             { $match : { followRatio: { $gte: followRatioResult }} },
             { $sample: { size: parseInt(params.query.numberOfUsers) } }
         ]);
         
-        console.log('find - x130');
+        console.log('find - x150');
         console.log('findResult: ');
         console.log(findResult);
         return findResult;
