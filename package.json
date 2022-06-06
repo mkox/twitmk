@@ -24,16 +24,16 @@
     "npm": ">= 3.0.0"
   },
   "scripts": {
-    "test": "npm run lint && npm run mocha",
+    "test": "npm run lint && npm run jest",
     "lint": "eslint src/. test/. --config .eslintrc.json --fix",
     "dev": "nodemon src/",
     "dev2": "node --inspect=0.0.0.0 src/",
     "start": "node src/",
-    "mocha": "mocha test/ --recursive --exit"
+    "jest": "jest --forceExit"
   },
   "standard": {
     "env": [
-      "mocha"
+      "jest"
     ],
     "ignore": []
   },
@@ -60,7 +60,7 @@
   "devDependencies": {
     "axios": "^0.24.0",
     "eslint": "^8.5.0",
-    "mocha": "^9.1.3",
+    "jest": "^28.1.0",
     "nodemon": "^2.0.15"
   }
 }

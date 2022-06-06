@@ -8,8 +8,8 @@ module.exports = function (app) {
     Model: createModel(app),
     //paginate: app.get('paginate')
     //paginate: {
-      //default: 20,
-      //max: 50
+    //default: 20,
+    //max: 50
     //},
     whitelist: ['$eq','$gte','$lte']
   };

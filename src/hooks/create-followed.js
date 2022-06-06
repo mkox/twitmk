@@ -7,7 +7,7 @@
 module.exports = (options = {}) => {
   return async context => {
     console.log('in hook');
-    const { data } = context;
+    //const { data } = context;
     //console.log('context: ');
     //console.log(context);
 

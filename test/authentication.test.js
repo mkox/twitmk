@@ -1,9 +1,8 @@
-const assert = require('assert');
 const app = require('../src/app');
 
 describe('authentication', () => {
   it('registered the authentication service', () => {
-    assert.ok(app.service('authentication'));
+    expect(app.service('authentication')).toBeTruthy();
   });
   
   describe('local strategy', () => {
@@ -12,7 +11,7 @@ describe('authentication', () => {
       password: 'supersecret'
     };
 
-    before(async () => {
+    beforeAll(async () => {
       try {
         await app.service('users').create(userInfo);
       } catch (error) {
@@ -26,8 +25,8 @@ describe('authentication', () => {
         ...userInfo
       });
       
-      assert.ok(accessToken, 'Created access token for user');
-      assert.ok(user, 'Includes user in authentication data');
+      expect(accessToken).toBeTruthy();
+      expect(user).toBeTruthy();
     });
   });
 });
