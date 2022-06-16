@@ -2,11 +2,12 @@ const app = require('../../src/app');
 
 beforeAll( async () => {
   var bulk;
+  var bulkFollowed;
 
   const fs = require('fs');
   //let rawdata = fs.readFileSync('../../data/test/tfollows-20220601.json');
   //let rawdata = fs.readFileSync(path.resolve(__dirname, '../../data/test/tfollows-20220601.json'));
-  let rawdata = fs.readFileSync('data/test/tfollows-20220601.json');
+  let rawdata = fs.readFileSync('data/test/tfollows-20220601-2.json');
   let users = JSON.parse(rawdata);
   console.log('users: ');
   console.log(users);
@@ -29,6 +30,31 @@ beforeAll( async () => {
     console.log('bulkRes.upsertedCount: ' + bulkRes.upsertedCount);
     console.log('bulkRes.modifiedCount: ' + bulkRes.modifiedCount);
   }  
+
+  let rawdataFollowed = fs.readFileSync('data/test/followeds-20220616.json');
+  let usersFollowed = JSON.parse(rawdataFollowed);
+  console.log('usersFollowed: ');
+  console.log(usersFollowed);
+
+  bulkFollowed = [];
+  for (let i = 0; i < usersFollowed.length; i++) {
+    bulkFollowed.push(
+      {
+        updateOne: {
+          filter: { twUserId: usersFollowed[i].twUserId },
+          update: { twUserId: usersFollowed[i].twUserId, followedIds:  usersFollowed[i].followedIds, twUser: usersFollowed[i].twUser, twUserName: usersFollowed[i].twUserName},
+          upsert: true
+        }
+      }
+    );
+  }
+  if(bulkFollowed.length > 0){
+    const serviceFollowed = app.service('followed');
+    var bulkResFollowed = await serviceFollowed.options.Model.bulkWrite(bulkFollowed);
+    console.log('bulkResFollowed.upsertedCount: ' + bulkResFollowed.upsertedCount);
+    console.log('bulkResFollowed.modifiedCount: ' + bulkResFollowed.modifiedCount);
+  }  
+
 });
 
 describe('\'tfollow\' service', () => {
@@ -39,8 +65,6 @@ describe('\'tfollow\' service', () => {
 });
 
 
-
-/*
 test('Get user list to follow users: nothing checked', async () => {
   const service = app.service('tfollow');
   var findResult = await service.find({ 
@@ -58,6 +82,5 @@ test('Get user list to follow users: nothing checked', async () => {
   console.log('findResult: ');
   console.log('findResult.length: ');
   console.log(findResult.length);
-  expect(findResult.length).toBe(7);
+  expect(findResult.length).toBe(5);
 });
-*/
