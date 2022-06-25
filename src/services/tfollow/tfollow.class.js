@@ -5,6 +5,14 @@ const { TwitterApi } = require('twitter-api-v2');
 const config = require('config');
 const client = new TwitterApi(config.get('twitterBearerToken'));
 
+//const standardFollowerId = Service.app.get('standardFollowerId');
+var standardFollowerId = config.get('standardFollowerId');
+if(process.env.NODE_ENV === "test"){
+  standardFollowerId = '12345678';
+}
+console.log('x1 - standardFollowerId: ');
+console.log(standardFollowerId);
+
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -149,7 +157,7 @@ exports.Tfollow = class Tfollow extends Service {
 
   async _getAndStoreFollowedByStandardUser () {
     try {
-      var standardFollowerId = this.app.get('standardFollowerId');
+      //var standardFollowerId = this.app.get('standardFollowerId');
       //var standardFollowerId = '156561882';
 
       console.log('standardFollowerId:' + standardFollowerId);
@@ -302,13 +310,14 @@ exports.Tfollow = class Tfollow extends Service {
   async _findRandomFollowers(params){
     var findResult;
     var followRatioResult = parseInt(params.query.followRatioNumerator) / parseInt(params.query.followRatioDenominator);
-    var standardFollowerId = this.app.get('standardFollowerId');
+    //var standardFollowerId = this.app.get('standardFollowerId');
     //var isFollowingId;
     var isFollowingIds;
     var excludedFollowerId;
         
     console.log('find - params: ');
     console.log(params);
+
     console.log('params.query.followedUserId: ');
     console.log(params.query.followedUserId);
 

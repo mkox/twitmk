@@ -69,7 +69,7 @@ test('Get user list to follow users: nothing checked', async () => {
   const service = app.service('tfollow');
   var findResult = await service.find({ 
     query: {
-      followedUserId: 12345678,
+      followedUserId: '12345678',
       removeFollowedByStandardFollower: false,
       removeFollowingStandardFollower: false,
       minimumOfFollowers: 0,
@@ -82,5 +82,5 @@ test('Get user list to follow users: nothing checked', async () => {
   console.log('findResult: ');
   console.log('findResult.length: ');
   console.log(findResult.length);
-  expect(findResult.length).toBe(5);
+  expect(findResult.length).toBe(4);
 });
