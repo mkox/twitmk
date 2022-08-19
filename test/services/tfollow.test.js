@@ -7,7 +7,7 @@ beforeAll( async () => {
   const fs = require('fs');
   //let rawdata = fs.readFileSync('../../data/test/tfollows-20220601.json');
   //let rawdata = fs.readFileSync(path.resolve(__dirname, '../../data/test/tfollows-20220601.json'));
-  let rawdata = fs.readFileSync('data/test/tfollows-20220601-2.json');
+  let rawdata = fs.readFileSync('data/test/tfollows-20220601-3.json');
   let users = JSON.parse(rawdata);
   console.log('users: ');
   console.log(users);
@@ -74,6 +74,32 @@ test('Get user list to follow users: nothing checked', async () => {
       removeFollowingStandardFollower: false,
       minimumOfFollowers: 0,
       followRatio: false,
+      followRatioNumerator: 1,
+      followRatioDenominator: 10,
+      numberOfUsers: 100,
+      findOption: 1
+    } 
+  });
+  /*
+  console.log(findResult);
+  console.log('findResult: ');
+  console.log('findResult.length: ');
+  console.log(findResult.length);
+  */
+  expect(findResult.length).toBe(7);
+});
+
+test('Get user list to follow users: three times checked', async () => {
+  const service = app.service('tfollow');
+  var findResult = await service.find({ 
+    query: {
+      followedUserId: '12345678',
+      removeFollowedByStandardFollower: true,
+      removeFollowingStandardFollower: true,
+      minimumOfFollowers: 0,
+      followRatio: true,
+      followRatioNumerator: 1,
+      followRatioDenominator: 10,
       numberOfUsers: 100,
       findOption: 1
     } 
@@ -83,4 +109,136 @@ test('Get user list to follow users: nothing checked', async () => {
   console.log('findResult.length: ');
   console.log(findResult.length);
   expect(findResult.length).toBe(4);
+});
+
+test('Get user list to follow users: removeFollowedByStandardFollower checked', async () => {
+  const service = app.service('tfollow');
+  var findResult = await service.find({ 
+    query: {
+      followedUserId: '12345678',
+      removeFollowedByStandardFollower: true,
+      removeFollowingStandardFollower: false,
+      minimumOfFollowers: 0,
+      followRatio: false,
+      followRatioNumerator: 1,
+      followRatioDenominator: 10,
+      numberOfUsers: 100,
+      findOption: 1
+    } 
+  });
+  console.log(findResult);
+  console.log('findResult: ');
+  console.log('findResult.length: ');
+  console.log(findResult.length);
+  expect(findResult.length).toBe(1);
+});
+
+test('Get user list to follow users: removeFollowingStandardFollower checked', async () => {
+  const service = app.service('tfollow');
+  var findResult = await service.find({ 
+    query: {
+      followedUserId: '12345678',
+      removeFollowedByStandardFollower: false,
+      removeFollowingStandardFollower: true,
+      minimumOfFollowers: 0,
+      followRatio: false,
+      followRatioNumerator: 1,
+      followRatioDenominator: 10,
+      numberOfUsers: 100,
+      findOption: 1
+    } 
+  });
+  console.log(findResult);
+  console.log('findResult: ');
+  console.log('findResult.length: ');
+  console.log(findResult.length);
+  expect(findResult.length).toBe(1);
+});
+
+test('Get user list to follow users: followRatio checked', async () => {
+  const service = app.service('tfollow');
+  var findResult = await service.find({ 
+    query: {
+      followedUserId: '12345678',
+      removeFollowedByStandardFollower: false,
+      removeFollowingStandardFollower: false,
+      minimumOfFollowers: 0,
+      followRatio: true,
+      followRatioNumerator: 1,
+      followRatioDenominator: 10,
+      numberOfUsers: 100,
+      findOption: 1
+    } 
+  });
+  console.log(findResult);
+  console.log('findResult: ');
+  console.log('findResult.length: ');
+  console.log(findResult.length);
+  expect(findResult.length).toBe(1);
+});
+
+test('Get user list to follow users: removeFollowedByStandardFollower + removeFollowingStandardFollower checked', async () => {
+  const service = app.service('tfollow');
+  var findResult = await service.find({ 
+    query: {
+      followedUserId: '12345678',
+      removeFollowedByStandardFollower: true,
+      removeFollowingStandardFollower: true,
+      minimumOfFollowers: 0,
+      followRatio: false,
+      followRatioNumerator: 1,
+      followRatioDenominator: 10,
+      numberOfUsers: 100,
+      findOption: 1
+    } 
+  });
+  console.log(findResult);
+  console.log('findResult: ');
+  console.log('findResult.length: ');
+  console.log(findResult.length);
+  expect(findResult.length).toBe(2);
+});
+
+test('Get user list to follow users: removeFollowedByStandardFollower + followRatio checked', async () => {
+  const service = app.service('tfollow');
+  var findResult = await service.find({ 
+    query: {
+      followedUserId: '12345678',
+      removeFollowedByStandardFollower: true,
+      removeFollowingStandardFollower: false,
+      minimumOfFollowers: 0,
+      followRatio: true,
+      followRatioNumerator: 1,
+      followRatioDenominator: 10,
+      numberOfUsers: 100,
+      findOption: 1
+    } 
+  });
+  console.log(findResult);
+  console.log('findResult: ');
+  console.log('findResult.length: ');
+  console.log(findResult.length);
+  expect(findResult.length).toBe(2);
+});
+
+test('Get user list to follow users: removeFollowingStandardFollower + followRatio checked', async () => {
+  const service = app.service('tfollow');
+  var findResult = await service.find({ 
+    query: {
+      followedUserId: '12345678',
+      removeFollowedByStandardFollower: false,
+      removeFollowingStandardFollower: true,
+      minimumOfFollowers: 0,
+      followRatio: true,
+      followRatioNumerator: 1,
+      followRatioDenominator: 10,
+      numberOfUsers: 100,
+      findOption: 1
+    } 
+  });
+  console.log(findResult);
+  console.log('findResult: ');
+  console.log('findResult.length: ');
+  console.log(findResult.length);
+  expect(findResult.length).toBe(2);
 });

@@ -8,7 +8,7 @@ const client = new TwitterApi(config.get('twitterBearerToken'));
 //const standardFollowerId = Service.app.get('standardFollowerId');
 var standardFollowerId = config.get('standardFollowerId');
 if(process.env.NODE_ENV === "test"){
-  standardFollowerId = '12345678';
+  standardFollowerId = '111111';
 }
 console.log('x1 - standardFollowerId: ');
 console.log(standardFollowerId);
