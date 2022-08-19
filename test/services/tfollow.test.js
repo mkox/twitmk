@@ -104,11 +104,14 @@ test('Get user list to follow users: three times checked', async () => {
       findOption: 1
     } 
   });
+  /*
+  console.log('three times checked: ');
   console.log(findResult);
   console.log('findResult: ');
   console.log('findResult.length: ');
   console.log(findResult.length);
-  expect(findResult.length).toBe(4);
+  */
+  expect(findResult.length).toBe(1);
 });
 
 test('Get user list to follow users: removeFollowedByStandardFollower checked', async () => {
@@ -126,11 +129,14 @@ test('Get user list to follow users: removeFollowedByStandardFollower checked', 
       findOption: 1
     } 
   });
+  /*
+  console.log('removeFollowedByStandardFollower checked: ');
   console.log(findResult);
   console.log('findResult: ');
   console.log('findResult.length: ');
   console.log(findResult.length);
-  expect(findResult.length).toBe(1);
+  */
+  expect(findResult.length).toBe(2);
 });
 
 test('Get user list to follow users: removeFollowingStandardFollower checked', async () => {
@@ -148,11 +154,14 @@ test('Get user list to follow users: removeFollowingStandardFollower checked', a
       findOption: 1
     } 
   });
+  /*
+  console.log('removeFollowingStandardFollower checked: ');
   console.log(findResult);
   console.log('findResult: ');
   console.log('findResult.length: ');
   console.log(findResult.length);
-  expect(findResult.length).toBe(1);
+  */
+  expect(findResult.length).toBe(5);
 });
 
 test('Get user list to follow users: followRatio checked', async () => {
@@ -170,11 +179,14 @@ test('Get user list to follow users: followRatio checked', async () => {
       findOption: 1
     } 
   });
+  /*
+  console.log('followRatio checked: ');
   console.log(findResult);
   console.log('findResult: ');
   console.log('findResult.length: ');
   console.log(findResult.length);
-  expect(findResult.length).toBe(1);
+  */
+  expect(findResult.length).toBe(6);
 });
 
 test('Get user list to follow users: removeFollowedByStandardFollower + removeFollowingStandardFollower checked', async () => {
@@ -192,11 +204,14 @@ test('Get user list to follow users: removeFollowedByStandardFollower + removeFo
       findOption: 1
     } 
   });
+  /*
+  console.log('removeFollowedByStandardFollower + removeFollowingStandardFollower checked: ');
   console.log(findResult);
   console.log('findResult: ');
   console.log('findResult.length: ');
   console.log(findResult.length);
-  expect(findResult.length).toBe(2);
+  */
+  expect(findResult.length).toBe(1);
 });
 
 test('Get user list to follow users: removeFollowedByStandardFollower + followRatio checked', async () => {
@@ -214,10 +229,13 @@ test('Get user list to follow users: removeFollowedByStandardFollower + followRa
       findOption: 1
     } 
   });
+  /*
+  console.log('removeFollowedByStandardFollower + followRatio checked: ');
   console.log(findResult);
   console.log('findResult: ');
   console.log('findResult.length: ');
   console.log(findResult.length);
+  */
   expect(findResult.length).toBe(2);
 });
 
@@ -236,9 +254,12 @@ test('Get user list to follow users: removeFollowingStandardFollower + followRat
       findOption: 1
     } 
   });
+  /*
+  console.log('removeFollowingStandardFollower + followRatio checked: ');
   console.log(findResult);
   console.log('findResult: ');
   console.log('findResult.length: ');
   console.log(findResult.length);
-  expect(findResult.length).toBe(2);
+  */
+  expect(findResult.length).toBe(4);
 });
