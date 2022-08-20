@@ -56,6 +56,10 @@ exports.Tfollow = class Tfollow extends Service {
       //var upsertItem;
       var bulk;
       var bulk2;
+
+
+      const date = new Date();  // at the start of this method
+      var isoDate = date.toISOString();
             
       /*
             //console.log('this.app:');
@@ -145,6 +149,24 @@ exports.Tfollow = class Tfollow extends Service {
                 */
         //newPage = 0; //here only for tests
       } while (newPage == 1);
+
+      /* Remove unfollowed */
+      var removeUnfollowed = {
+        $and: [
+          { followedIds: { $in: [ idOfFollowedUser ] }},
+          { updatedAt: { $lt: isoDate }},
+          { followedIds: { $size: 1 } }
+        ]
+      }
+      await this.options.Model.deleteMany(removeUnfollowed);
+      await this.options.Model.updateMany(
+        { $and: [
+          { followedIds: { $in: [ idOfFollowedUser ] }},
+          { updatedAt: { $lt: isoDate }}
+          ]
+        },
+        { $pull: { followedIds: idOfFollowedUser }}
+        );
             
       const serviceFollowed = this.app.service('followed');
       serviceFollowed.create(data, params);
