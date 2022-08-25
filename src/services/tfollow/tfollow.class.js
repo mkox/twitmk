@@ -133,8 +133,8 @@ exports.Tfollow = class Tfollow extends Service {
           );
         }
         var bulkRes2 = await this.options.Model.bulkWrite(bulk2);
-        console.log('bulkRes.upsertedCount: ' + bulkRes2.upsertedCount);
-        console.log('bulkRes.modifiedCount: ' + bulkRes2.modifiedCount);
+        console.log('bulkRes2.upsertedCount: ' + bulkRes2.upsertedCount);
+        console.log('bulkRes2.modifiedCount: ' + bulkRes2.modifiedCount);
                 
 
 
@@ -155,7 +155,8 @@ exports.Tfollow = class Tfollow extends Service {
         $and: [
           { followedIds: { $in: [ idOfFollowedUser ] }},
           { updatedAt: { $lt: isoDate }},
-          { followedIds: { $size: 1 } }
+          { followedIds: { $size: 1 } },
+          { 'standardFollower.isFollowing': 0}
         ]
       }
       await this.options.Model.deleteMany(removeUnfollowed);
