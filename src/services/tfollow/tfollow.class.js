@@ -297,7 +297,7 @@ exports.Tfollow = class Tfollow extends Service {
               {
                 updateOne: {
                   filter: { twUserId: usersFollowedByStandardUser[i].twUserId },
-                  update: { 'standardFollower.isFollowing': 0  }
+                  update: { 'standardFollower.isFollowing': 0, 'standardFollower.unfollowOnOrBefore': isoDate  }
                 }
               }
             );
@@ -383,12 +383,23 @@ exports.Tfollow = class Tfollow extends Service {
     console.log('standardFollowerId: ' + standardFollowerId);
     console.log('followRatioResult: ' + followRatioResult);
     console.log('excludedFollowerId: ' + excludedFollowerId);
-        
+
+    var removeOnce2ndValue;
+    if (params.query.removeOnceFollowedByStandardFollower == true) {
+      removeOnce2ndValue =  false;
+    } else {
+      removeOnce2ndValue =  true;
+    }
+    
     findResult = await this.options.Model.aggregate([
       { $match : { followedIds: { $in: [ params.query.followedUserId ] } }},
       { $match : { followedIds: { $nin: [ excludedFollowerId ] } }},
       //{ $match : { 'standardFollower.isFollowing': isFollowingId} },
       { $match : { 'standardFollower.isFollowing': { $in: isFollowingIds }} },
+      { $match : {$or: [
+        { 'standardFollower.unfollowOnOrBefore': { $exists: false } },
+        { 'standardFollower.unfollowOnOrBefore': { $exists: removeOnce2ndValue } }
+      ]}},
       { $match : { 'twUser.public_metrics.followers_count': { $gte: parseInt(params.query.minimumOfFollowers) }} },
       { $addFields : { followRatio : { $divide: [ '$twUser.public_metrics.followers_count', '$twUser.public_metrics.following_count' ] } } },
       { $match : { followRatio: { $gte: followRatioResult }} },

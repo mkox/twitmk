@@ -40,6 +40,7 @@
             <input type="text" id="how-much-random-users" value="250"><br>
             <label for="how-much-random-users">How much user sites open together:</label>
             <input type="text" id="how-much-user-sites-together" value="20"><br>
+            <input type="checkbox" id="remove-once-followed-by-standard-follower" checked> Remove users once followed by standard follower.<br />
             <button type="submit" class="button button-primary">Get random users</button>
           </form>
         </td>
@@ -100,6 +101,7 @@
       followersCount = 0;
       var followedForRandomUsers = document.getElementById('followed-for-random-users');
       var removeFollowedByStandardFollower = document.getElementById('remove-followed-by-standard-follower');
+      var removeOnceFollowedByStandardFollower = document.getElementById('remove-once-followed-by-standard-follower');
       var removeFollowingStandardFollower = document.getElementById('remove-following-standard-follower');
       var minimumOfFollowers = document.getElementById('minimum-of-followers');
       var followRatio = document.getElementById('follow-ratio');
@@ -111,6 +113,7 @@
         query: {
           followedUserId: followedForRandomUsers.value,
           removeFollowedByStandardFollower: removeFollowedByStandardFollower.checked,
+          removeOnceFollowedByStandardFollower: removeOnceFollowedByStandardFollower.checked,
           removeFollowingStandardFollower: removeFollowingStandardFollower.checked,
           minimumOfFollowers: minimumOfFollowers.value,
           followRatio: followRatio.checked,
