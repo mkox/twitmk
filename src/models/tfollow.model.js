@@ -10,7 +10,8 @@ module.exports = function (app) {
     twUserId: { type: String, required: true, index: true, unique: true},
     twUser: {},
     followedIds: [String],
-    standardFollower: {}
+    standardFollower: {},
+    open: {}
   }, {
     timestamps: true
   });

@@ -466,6 +466,26 @@ exports.Tfollow = class Tfollow extends Service {
       console.log('find - NO OPTION FITS!');
     }
   }
+
+  async _addOpenDate(twUserId, params){
+    
+    return await this.options.Model.updateOne(
+      { twUserId: twUserId}, 
+      { $set: { 'open.date': params.isoDate } }
+    )
+  }
+
+  update(...args){
+    console.log('update - x100'); 
+    //console.log('args:');
+    //console.log(args);
+
+    if(args[1].updateOption === 'addOpenDate' ){
+      return this._addOpenDate(...args);
+    } else  {
+      console.log('update - NO OPTION FITS!');
+    }
+  }
     
   setup(app) {
     //console.log('tfollow - x15');

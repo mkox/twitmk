@@ -186,13 +186,26 @@
           minPages = followers.length - howMuchUserSitesTogether + 1
         }
       }
+
+      var date = new Date();  // at the start of this method
+      var isoDate = date.toISOString();
       for(let i = (minPages - 1); i <= (maxPages - 1); i++) {
-        openSingleWindow (followers[i]);
+        openSingleWindow (followers[i], isoDate);
       }
     }
 
-    function openSingleWindow (follower) { 
+    async function openSingleWindow (follower, isoDate) { 
       window.open('https://twitter.com/' + follower.twUser.username);
+
+      var openDateResult = await app.service('tfollow').update(follower.twUserId, 
+        { 
+          isoDate: isoDate,
+          updateOption: 'addOpenDate'
+        }
+      );
+      //console.log('openDateResult: ');
+      //console.log(openDateResult);
+      
     }
 
     // Renders a single follower on the page
