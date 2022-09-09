@@ -41,6 +41,7 @@
             <label for="how-much-random-users">How much user sites open together:</label>
             <input type="text" id="how-much-user-sites-together" value="20"><br>
             <input type="checkbox" id="remove-once-followed-by-standard-follower" checked> Remove users once followed by standard follower.<br />
+            <input type="checkbox" id="show-despite-open-date exists"> Show users despite open date exists.<br />
             <button type="submit" class="button button-primary">Get random users</button>
           </form>
         </td>
@@ -101,25 +102,27 @@
       followersCount = 0;
       var followedForRandomUsers = document.getElementById('followed-for-random-users');
       var removeFollowedByStandardFollower = document.getElementById('remove-followed-by-standard-follower');
-      var removeOnceFollowedByStandardFollower = document.getElementById('remove-once-followed-by-standard-follower');
       var removeFollowingStandardFollower = document.getElementById('remove-following-standard-follower');
       var minimumOfFollowers = document.getElementById('minimum-of-followers');
       var followRatio = document.getElementById('follow-ratio');
       var followRatioNumerator = document.getElementById('follow-ratio-numerator');
       var followRatioDenominator = document.getElementById('follow-ratio-denominator');
       var howMuchRandomUsers = document.getElementById('how-much-random-users');
+      var removeOnceFollowedByStandardFollower = document.getElementById('remove-once-followed-by-standard-follower');
+      var showDespiteOpenDateExists = document.getElementById('show-despite-open-date exists');
 
       followers = await app.service('tfollow').find({ 
         query: {
           followedUserId: followedForRandomUsers.value,
           removeFollowedByStandardFollower: removeFollowedByStandardFollower.checked,
-          removeOnceFollowedByStandardFollower: removeOnceFollowedByStandardFollower.checked,
           removeFollowingStandardFollower: removeFollowingStandardFollower.checked,
           minimumOfFollowers: minimumOfFollowers.value,
           followRatio: followRatio.checked,
           followRatioNumerator: followRatioNumerator.value,
           followRatioDenominator: followRatioDenominator.value,
           numberOfUsers: howMuchRandomUsers.value,
+          removeOnceFollowedByStandardFollower: removeOnceFollowedByStandardFollower.checked,
+          showDespiteOpenDateExists: showDespiteOpenDateExists.checked,
           findOption: 1
         } 
       });

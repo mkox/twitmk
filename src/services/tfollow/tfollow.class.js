@@ -401,6 +401,10 @@ exports.Tfollow = class Tfollow extends Service {
         { 'standardFollower.unfollowOnOrBefore': { $exists: removeOnce2ndValue } }
       ]}},
       { $match : { 'twUser.public_metrics.followers_count': { $gte: parseInt(params.query.minimumOfFollowers) }} },
+      { $match : {$or: [
+        { 'open.date': { $exists: false } },
+        { 'open.date': { $exists: params.query.showDespiteOpenDateExists } }
+      ]}},
       { $addFields : { followRatio : { $divide: [ '$twUser.public_metrics.followers_count', '$twUser.public_metrics.following_count' ] } } },
       { $match : { followRatio: { $gte: followRatioResult }} },
       { $sample: { size: parseInt(params.query.numberOfUsers) } }
@@ -476,7 +480,7 @@ exports.Tfollow = class Tfollow extends Service {
   }
 
   update(...args){
-    console.log('update - x100'); 
+    //console.log('update - x100'); 
     //console.log('args:');
     //console.log(args);
 
