@@ -446,8 +446,10 @@ exports.Tfollow = class Tfollow extends Service {
         
     findResult = await this.options.Model.aggregate([
       { $match : { 'standardFollower.isFollowing': 1} },
-      { $match : { 'standardFollower.followOnOrBefore': { $gte: isoStartDate }} },
-      { $match : { 'standardFollower.followOnOrBefore': { $lte: isoEndDate }} }
+     /* { $match : { 'standardFollower.followOnOrBefore': { $gte: isoStartDate }} },
+      { $match : { 'standardFollower.followOnOrBefore': { $lte: isoEndDate }} }*/
+      { $match : { 'open.date': { $gte: isoStartDate }} },
+      { $match : { 'open.date': { $lte: isoEndDate }} }
     ]);
         
     console.log('find gFBD - x130');
