@@ -449,7 +449,8 @@ exports.Tfollow = class Tfollow extends Service {
      /* { $match : { 'standardFollower.followOnOrBefore': { $gte: isoStartDate }} },
       { $match : { 'standardFollower.followOnOrBefore': { $lte: isoEndDate }} }*/
       { $match : { 'open.date': { $gte: isoStartDate }} },
-      { $match : { 'open.date': { $lte: isoEndDate }} }
+      { $match : { 'open.date': { $lte: isoEndDate }} },
+      { $match : { followedIds: { $nin: [ standardFollowerId ] } }}
     ]);
         
     console.log('find gFBD - x130');

@@ -48,7 +48,8 @@
         <td style="vertical-align: text-top;">
           <h2>Get user list<br>to unfollow users:</h2>
           <form class="form" onsubmit="getFollowedByDate(event.preventDefault())">
-            Date range for start of following a user (by open date):<br>
+            Date range for start of following a user<br>
+            (by open date, only users not following standard follower):<br>
             Start: <input type="text" id="following-start-date" placeholder="yyyy-mm-dd"> End: <input type="text" id="following-end-date"  placeholder="yyyy-mm-dd"><br>
             <button type="submit" class="button button-primary">Get users</button>
           </form>
