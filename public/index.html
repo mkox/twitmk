@@ -40,6 +40,8 @@
             <input type="text" id="how-much-random-users" value="250"><br>
             <label for="how-much-random-users">How much user sites open together:</label>
             <input type="text" id="how-much-user-sites-together" value="20"><br>
+            <label for="keywords">Keywords (separated by comma and other punctuations):</label><br>
+            <input type="text" id="keywords" size="60" value=""><br>
             <input type="checkbox" id="remove-once-followed-by-standard-follower" checked> Remove users once followed by standard follower.<br />
             <input type="checkbox" id="show-despite-open-date exists"> Show users despite open date exists.<br />
             <button type="submit" class="button button-primary">Get random users</button>
@@ -109,6 +111,7 @@
       var followRatioNumerator = document.getElementById('follow-ratio-numerator');
       var followRatioDenominator = document.getElementById('follow-ratio-denominator');
       var howMuchRandomUsers = document.getElementById('how-much-random-users');
+      var keywords = document.getElementById('keywords');
       var removeOnceFollowedByStandardFollower = document.getElementById('remove-once-followed-by-standard-follower');
       var showDespiteOpenDateExists = document.getElementById('show-despite-open-date exists');
 
@@ -122,6 +125,7 @@
           followRatioNumerator: followRatioNumerator.value,
           followRatioDenominator: followRatioDenominator.value,
           numberOfUsers: howMuchRandomUsers.value,
+          keywords: keywords.value,
           removeOnceFollowedByStandardFollower: removeOnceFollowedByStandardFollower.checked,
           showDespiteOpenDateExists: showDespiteOpenDateExists.checked,
           findOption: 1
@@ -216,7 +220,7 @@
     function addFollower (follower) {
       followersCount++;
       document.getElementById('user-list').innerHTML += 
-      `<p>${followersCount} - <a href="https://twitter.com/${follower.twUser.username}" target="_blank">${follower.twUser.username}</a> - ${follower.twUser.name} - ${follower.twUser.public_metrics.followers_count} - ${follower.twUser.public_metrics.following_count} - ${follower.twUser.description}</p>`;
+      `<p>${followersCount} - <a href="https://twitter.com/${follower.twUser.username}" target="_blank">${follower.twUser.username}</a> - ${follower.twUser.name} - ${follower.twUser.public_metrics.followers_count} - ${follower.twUser.public_metrics.following_count} - ${follower.twUser.location} - ${follower.twUser.description}</p>`;
     }
 
     // Renders a single followed to a select form

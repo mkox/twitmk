@@ -16,6 +16,16 @@ module.exports = function (app) {
     timestamps: true
   });
 
+  schema.index({ "$**": "text" }); // For searching in text fields.
+  /**
+  schema.index( // For searching in text fields.
+    { 'twUser.location': 'text' },
+    { 'twUser.description': 'text' },
+    { 'twUser.name': 'text' },
+    { 'twUser.username': 'text' }
+  );
+  */
+
   // This is necessary to avoid model compilation errors in watch mode
   // see https://mongoosejs.com/docs/api/connection.html#connection_Connection-deleteModel
   if (mongooseClient.modelNames().includes(modelName)) {

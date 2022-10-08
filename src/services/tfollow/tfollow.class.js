@@ -390,8 +390,14 @@ exports.Tfollow = class Tfollow extends Service {
     } else {
       removeOnce2ndValue =  true;
     }
+
+    var keywordsearch = { twUserId: { $exists: true } };
+    if (params.query.keywords != '') {
+     keywordsearch = { $text: { $search: params.query.keywords } };
+    }
     
     findResult = await this.options.Model.aggregate([
+      { $match : keywordsearch }, // $text match only works, when on first place
       { $match : { followedIds: { $in: [ params.query.followedUserId ] } }},
       { $match : { followedIds: { $nin: [ excludedFollowerId ] } }},
       //{ $match : { 'standardFollower.isFollowing': isFollowingId} },

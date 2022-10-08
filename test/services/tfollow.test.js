@@ -77,6 +77,7 @@ test('Get user list to follow users: nothing checked', async () => {
       followRatioNumerator: 1,
       followRatioDenominator: 10,
       numberOfUsers: 100,
+      keywords: '',
       findOption: 1
     } 
   });
@@ -101,6 +102,7 @@ test('Get user list to follow users: three times checked', async () => {
       followRatioNumerator: 1,
       followRatioDenominator: 10,
       numberOfUsers: 100,
+      keywords: '',
       findOption: 1
     } 
   });
@@ -126,6 +128,7 @@ test('Get user list to follow users: removeFollowedByStandardFollower checked', 
       followRatioNumerator: 1,
       followRatioDenominator: 10,
       numberOfUsers: 100,
+      keywords: '',
       findOption: 1
     } 
   });
@@ -151,6 +154,7 @@ test('Get user list to follow users: removeFollowingStandardFollower checked', a
       followRatioNumerator: 1,
       followRatioDenominator: 10,
       numberOfUsers: 100,
+      keywords: '',
       findOption: 1
     } 
   });
@@ -176,6 +180,7 @@ test('Get user list to follow users: followRatio checked', async () => {
       followRatioNumerator: 1,
       followRatioDenominator: 10,
       numberOfUsers: 100,
+      keywords: '',
       findOption: 1
     } 
   });
@@ -201,6 +206,7 @@ test('Get user list to follow users: removeFollowedByStandardFollower + removeFo
       followRatioNumerator: 1,
       followRatioDenominator: 10,
       numberOfUsers: 100,
+      keywords: '',
       findOption: 1
     } 
   });
@@ -226,6 +232,7 @@ test('Get user list to follow users: removeFollowedByStandardFollower + followRa
       followRatioNumerator: 1,
       followRatioDenominator: 10,
       numberOfUsers: 100,
+      keywords: '',
       findOption: 1
     } 
   });
@@ -251,6 +258,7 @@ test('Get user list to follow users: removeFollowingStandardFollower + followRat
       followRatioNumerator: 1,
       followRatioDenominator: 10,
       numberOfUsers: 100,
+      keywords: '',
       findOption: 1
     } 
   });

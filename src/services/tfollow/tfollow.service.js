@@ -11,7 +11,7 @@ module.exports = function (app) {
     //default: 20,
     //max: 50
     //},
-    whitelist: ['$eq','$gte','$lte']
+    whitelist: ['$eq','$gte','$lte','$text']
   };
 
   // Initialize our service with any options it requires
