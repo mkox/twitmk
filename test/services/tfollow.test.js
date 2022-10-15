@@ -78,6 +78,7 @@ test('Get user list to follow users: nothing checked', async () => {
       followRatioDenominator: 10,
       numberOfUsers: 100,
       keywords: '',
+      sortByRatioTweetsFollowers: false,
       findOption: 1
     } 
   });
@@ -103,6 +104,7 @@ test('Get user list to follow users: three times checked', async () => {
       followRatioDenominator: 10,
       numberOfUsers: 100,
       keywords: '',
+      sortByRatioTweetsFollowers: false,
       findOption: 1
     } 
   });
@@ -129,6 +131,7 @@ test('Get user list to follow users: removeFollowedByStandardFollower checked', 
       followRatioDenominator: 10,
       numberOfUsers: 100,
       keywords: '',
+      sortByRatioTweetsFollowers: false,
       findOption: 1
     } 
   });
@@ -155,6 +158,7 @@ test('Get user list to follow users: removeFollowingStandardFollower checked', a
       followRatioDenominator: 10,
       numberOfUsers: 100,
       keywords: '',
+      sortByRatioTweetsFollowers: false,
       findOption: 1
     } 
   });
@@ -181,6 +185,7 @@ test('Get user list to follow users: followRatio checked', async () => {
       followRatioDenominator: 10,
       numberOfUsers: 100,
       keywords: '',
+      sortByRatioTweetsFollowers: false,
       findOption: 1
     } 
   });
@@ -207,6 +212,7 @@ test('Get user list to follow users: removeFollowedByStandardFollower + removeFo
       followRatioDenominator: 10,
       numberOfUsers: 100,
       keywords: '',
+      sortByRatioTweetsFollowers: false,
       findOption: 1
     } 
   });
@@ -233,6 +239,7 @@ test('Get user list to follow users: removeFollowedByStandardFollower + followRa
       followRatioDenominator: 10,
       numberOfUsers: 100,
       keywords: '',
+      sortByRatioTweetsFollowers: false,
       findOption: 1
     } 
   });
@@ -259,6 +266,7 @@ test('Get user list to follow users: removeFollowingStandardFollower + followRat
       followRatioDenominator: 10,
       numberOfUsers: 100,
       keywords: '',
+      sortByRatioTweetsFollowers: false,
       findOption: 1
     } 
   });
