@@ -43,7 +43,8 @@
             <label for="keywords">Keywords (separated by comma and other punctuations):</label><br>
             <input type="text" id="keywords" size="60" value=""><br>
             <input type="checkbox" id="remove-once-followed-by-standard-follower" checked> Remove users once followed by standard follower.<br />
-            <input type="checkbox" id="sort-by-ratio-tweets-followers" checked> Sort by ratio tweets/followers.<br />
+            <input type="checkbox" id="sort-by-ratio-tweets-followers" > Sort by ratio tweets/followers.<br />
+            <input type="checkbox" id="sort-by-in-how-much-selected-followed-users" > Sort by in how much selected followed users.<br />
             <input type="checkbox" id="show-despite-open-date exists"> Show users despite open date exists.<br />
             <button type="submit" class="button button-primary">Get random users</button>
           </form>
@@ -115,6 +116,7 @@
       var keywords = document.getElementById('keywords');
       var removeOnceFollowedByStandardFollower = document.getElementById('remove-once-followed-by-standard-follower');
       var sortByRatioTweetsFollowers = document.getElementById('sort-by-ratio-tweets-followers');
+      var sortByInHowMuchSelectedFollowedUsers = document.getElementById('sort-by-in-how-much-selected-followed-users');
       var showDespiteOpenDateExists = document.getElementById('show-despite-open-date exists');
       
       followers = await app.service('tfollow').find({ 
@@ -130,6 +132,7 @@
           keywords: keywords.value,
           removeOnceFollowedByStandardFollower: removeOnceFollowedByStandardFollower.checked,
           sortByRatioTweetsFollowers: sortByRatioTweetsFollowers.checked,
+          sortByInHowMuchSelectedFollowedUsers: sortByInHowMuchSelectedFollowedUsers.checked,
           showDespiteOpenDateExists: showDespiteOpenDateExists.checked,
           findOption: 1
         } 
@@ -223,7 +226,7 @@
     function addFollower (follower) {
       followersCount++;
       document.getElementById('user-list').innerHTML += 
-      `<p>${followersCount} - <a href="https://twitter.com/${follower.twUser.username}" target="_blank">${follower.twUser.username}</a> - ${follower.twUser.name} - ${follower.twUser.public_metrics.followers_count} - ${follower.twUser.public_metrics.following_count} - ${follower.twUser.public_metrics.tweet_count} - ` + Math.round(follower.twUser.public_metrics.tweets_per_follower * 1000) / 1000 +  ` - ${follower.twUser.location} - ${follower.twUser.description}</p>`;
+      `<p>${followersCount} - <a href="https://twitter.com/${follower.twUser.username}" target="_blank">${follower.twUser.username}</a> - ${follower.twUser.name} - ${follower.twUser.public_metrics.followers_count} - ${follower.twUser.public_metrics.following_count} - ${follower.twUser.public_metrics.tweet_count} - ` + Math.round(follower.twUser.public_metrics.tweets_per_follower * 1000) / 1000 +  ` - ${follower.followedIds.length} - ${follower.twUser.location} - ${follower.twUser.description}</p>`;
     }
 
     // Renders a single followed to a select form

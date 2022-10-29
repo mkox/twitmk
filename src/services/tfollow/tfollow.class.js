@@ -420,6 +420,7 @@ exports.Tfollow = class Tfollow extends Service {
     console.log('findResult: ');
     console.log(findResult);
     findResult = this._sortbyTweetsPerFollower(findResult, params.query.sortByRatioTweetsFollowers);
+    findResult = this._sortByInHowMuchSelectedFollowedUsers(findResult, params.query.sortByInHowMuchSelectedFollowedUsers);
     return findResult;
   }
   _sortbyTweetsPerFollower(findResult, sortByRatioTweetsFollowers) {
@@ -433,6 +434,12 @@ exports.Tfollow = class Tfollow extends Service {
     if(sortByRatioTweetsFollowers === true){
       findResult.sort(function(a, b){return a.twUser.public_metrics.tweets_per_follower - b.twUser.public_metrics.tweets_per_follower}); 
       findResult.reverse();
+    }
+    return findResult;
+  }
+  _sortByInHowMuchSelectedFollowedUsers(findResult, sortByInHowMuchSelectedFollowedUsers) {
+    if(sortByInHowMuchSelectedFollowedUsers === true){
+      findResult.sort(function(a, b){return b.followedIds.length - a.followedIds.length}); 
     }
     return findResult;
   }
