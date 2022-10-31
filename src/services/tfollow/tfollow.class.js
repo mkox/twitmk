@@ -100,54 +100,58 @@ exports.Tfollow = class Tfollow extends Service {
         }
         users = followersAsPaginator._realData.data;
         //console.log(users);
-
-        bulk = [];
-        for (let i = 0; i < users.length; i++) {
-          //let bulkItem = {updateOne: {}};
-          bulk.push(
-            {
-              updateOne: {
-                filter: { twUserId: users[i].id },
-                update: { twUserId: users[i].id, twUser: users[i], $addToSet: { followedIds: idOfFollowedUser } },
-                //update: { twUserId: users[i].id, twUser: users[i], $addToSet: { followedIds: idOfFollowedUser }, 'standardFollower.isFollowing': 0 },
-                upsert: true
-              }
-            }
-          );
-        }
-        var bulkRes = await this.options.Model.bulkWrite(bulk);
-        console.log('bulkRes.upsertedCount: ' + bulkRes.upsertedCount);
-        console.log('bulkRes.modifiedCount: ' + bulkRes.modifiedCount);
-
-        /* Only for 'standardFollower.isFollowing' */
-        bulk2 = [];
-        for (let i = 0; i < users.length; i++) {
-          //let bulkItem = {updateOne: {}};
-          bulk2.push(
-            {
-              updateOne: {
-                filter: { twUserId: users[i].id, 'standardFollower.isFollowing': {$exists : false} },
-                update: { $set: {'standardFollower.isFollowing': 0 } }
-              }
-            }
-          );
-        }
-        var bulkRes2 = await this.options.Model.bulkWrite(bulk2);
-        console.log('bulkRes2.upsertedCount: ' + bulkRes2.upsertedCount);
-        console.log('bulkRes2.modifiedCount: ' + bulkRes2.modifiedCount);
-                
-
-
-
-        /*
-                for (let i = 0; i < users.length; i++) {
-                    //this._create({twUserId: users[i].id, twUser: users[i], followedIds: [idOfFollowedUser]});
-                    upsertItem = await this.options.Model.findOneAndUpdate({twUserId: users[i].id},{twUserId: users[i].id, twUser: users[i], $addToSet: { followedIds: idOfFollowedUser }},{new: true, upsert: true});
-                    //console.log('upsertItem: ');
-                    //console.log(upsertItem);
+        if (typeof users !== 'undefined') {
+          bulk = [];
+          for (let i = 0; i < users.length; i++) {
+            //let bulkItem = {updateOne: {}};
+            bulk.push(
+              {
+                updateOne: {
+                  filter: { twUserId: users[i].id },
+                  update: { twUserId: users[i].id, twUser: users[i], $addToSet: { followedIds: idOfFollowedUser } },
+                  //update: { twUserId: users[i].id, twUser: users[i], $addToSet: { followedIds: idOfFollowedUser }, 'standardFollower.isFollowing': 0 },
+                  upsert: true
                 }
-                */
-        //newPage = 0; //here only for tests
+              }
+            );
+          }
+          var bulkRes = await this.options.Model.bulkWrite(bulk);
+          console.log('bulkRes.upsertedCount: ' + bulkRes.upsertedCount);
+          console.log('bulkRes.modifiedCount: ' + bulkRes.modifiedCount);
+
+          /* Only for 'standardFollower.isFollowing' */
+          bulk2 = [];
+          for (let i = 0; i < users.length; i++) {
+            //let bulkItem = {updateOne: {}};
+            bulk2.push(
+              {
+                updateOne: {
+                  filter: { twUserId: users[i].id, 'standardFollower.isFollowing': {$exists : false} },
+                  update: { $set: {'standardFollower.isFollowing': 0 } }
+                }
+              }
+            );
+          }
+          var bulkRes2 = await this.options.Model.bulkWrite(bulk2);
+          console.log('bulkRes2.upsertedCount: ' + bulkRes2.upsertedCount);
+          console.log('bulkRes2.modifiedCount: ' + bulkRes2.modifiedCount);
+                  
+
+
+
+          /*
+                  for (let i = 0; i < users.length; i++) {
+                      //this._create({twUserId: users[i].id, twUser: users[i], followedIds: [idOfFollowedUser]});
+                      upsertItem = await this.options.Model.findOneAndUpdate({twUserId: users[i].id},{twUserId: users[i].id, twUser: users[i], $addToSet: { followedIds: idOfFollowedUser }},{new: true, upsert: true});
+                      //console.log('upsertItem: ');
+                      //console.log(upsertItem);
+                  }
+                  */
+          //newPage = 0; //here only for tests
+        } else {
+          console.log('No result (user)');
+          return { message: 'No result for this user.' }
+        }
       } while (newPage == 1);
 
       /* Remove unfollowed */

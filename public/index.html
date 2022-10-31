@@ -85,11 +85,12 @@
       var messageInput = document.getElementById('message-text');
       var maxResults = document.getElementById('max-follower-per-twittercall');
 
-      await app.service('tfollow').create({
+      var createResult = await app.service('tfollow').create({
         text: messageInput.value,
         maxResults: maxResults.value,
         createOption: 1
       });
+      console.log(createResult);
 
       messageInput.value = '';
     }
