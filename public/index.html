@@ -27,6 +27,7 @@
         <td>
           <h2>Get user list<br>to follow users:</h2>
           <form class="form" onsubmit="getRandomFollowers(event.preventDefault())">
+            <input type="checkbox" id="all-followed-for-random-users"> Get random followers of <b>all</b> stored followed<br />
             <label for="followed-for-random-users">Get random followers of a single followed:</label>
             <select id="followed-for-random-users" name="followed-for-random-users">
             </select><br>
@@ -106,6 +107,7 @@
     async function getRandomFollowers () {
       document.getElementById('user-list').innerHTML = '';
       followersCount = 0;
+      var allFollowedForRandomUsers = document.getElementById('all-followed-for-random-users');
       var followedForRandomUsers = document.getElementById('followed-for-random-users');
       var removeFollowedByStandardFollower = document.getElementById('remove-followed-by-standard-follower');
       var removeFollowingStandardFollower = document.getElementById('remove-following-standard-follower');
@@ -122,6 +124,7 @@
       
       followers = await app.service('tfollow').find({ 
         query: {
+          allFollowedForRandomUsers: allFollowedForRandomUsers.checked,
           followedUserId: followedForRandomUsers.value,
           removeFollowedByStandardFollower: removeFollowedByStandardFollower.checked,
           removeFollowingStandardFollower: removeFollowingStandardFollower.checked,

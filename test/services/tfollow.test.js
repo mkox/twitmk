@@ -69,6 +69,7 @@ test('Get user list to follow users: nothing checked', async () => {
   const service = app.service('tfollow');
   var findResult = await service.find({ 
     query: {
+      allFollowedForRandomUsers: false,
       followedUserId: '12345678',
       removeFollowedByStandardFollower: false,
       removeFollowingStandardFollower: false,
@@ -95,6 +96,7 @@ test('Get user list to follow users: three times checked', async () => {
   const service = app.service('tfollow');
   var findResult = await service.find({ 
     query: {
+      allFollowedForRandomUsers: false,
       followedUserId: '12345678',
       removeFollowedByStandardFollower: true,
       removeFollowingStandardFollower: true,
@@ -122,6 +124,7 @@ test('Get user list to follow users: removeFollowedByStandardFollower checked', 
   const service = app.service('tfollow');
   var findResult = await service.find({ 
     query: {
+      allFollowedForRandomUsers: false,
       followedUserId: '12345678',
       removeFollowedByStandardFollower: true,
       removeFollowingStandardFollower: false,
@@ -149,6 +152,7 @@ test('Get user list to follow users: removeFollowingStandardFollower checked', a
   const service = app.service('tfollow');
   var findResult = await service.find({ 
     query: {
+      allFollowedForRandomUsers: false,
       followedUserId: '12345678',
       removeFollowedByStandardFollower: false,
       removeFollowingStandardFollower: true,
@@ -176,6 +180,7 @@ test('Get user list to follow users: followRatio checked', async () => {
   const service = app.service('tfollow');
   var findResult = await service.find({ 
     query: {
+      allFollowedForRandomUsers: false,
       followedUserId: '12345678',
       removeFollowedByStandardFollower: false,
       removeFollowingStandardFollower: false,
@@ -203,6 +208,7 @@ test('Get user list to follow users: removeFollowedByStandardFollower + removeFo
   const service = app.service('tfollow');
   var findResult = await service.find({ 
     query: {
+      allFollowedForRandomUsers: false,
       followedUserId: '12345678',
       removeFollowedByStandardFollower: true,
       removeFollowingStandardFollower: true,
@@ -230,6 +236,7 @@ test('Get user list to follow users: removeFollowedByStandardFollower + followRa
   const service = app.service('tfollow');
   var findResult = await service.find({ 
     query: {
+      allFollowedForRandomUsers: false,
       followedUserId: '12345678',
       removeFollowedByStandardFollower: true,
       removeFollowingStandardFollower: false,
@@ -257,6 +264,7 @@ test('Get user list to follow users: removeFollowingStandardFollower + followRat
   const service = app.service('tfollow');
   var findResult = await service.find({ 
     query: {
+      allFollowedForRandomUsers: false,
       followedUserId: '12345678',
       removeFollowedByStandardFollower: false,
       removeFollowingStandardFollower: true,
