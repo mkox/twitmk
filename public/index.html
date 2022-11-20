@@ -243,6 +243,15 @@
       const followed = await app.service('followed').find();
       console.log(followed);
       var followedData = followed.data;
+      followedData.sort(function(a, b){  
+        let x = a.twUser.username.toLowerCase();
+        let y = b.twUser.username.toLowerCase();
+        if (x < y) {return -1;}
+        if (x > y) {return 1;}
+        return 0;
+        }
+      ); 
+      console.log('followedData after sort: ', followedData);
       followedData.forEach(addFollowed);
     }
 
