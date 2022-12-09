@@ -403,6 +403,8 @@ exports.Tfollow = class Tfollow extends Service {
     if (params.query.allFollowedForRandomUsers !== true) {
       allOrOneFollowedId = { followedIds: { $in: [ params.query.followedUserId ] } };
     }
+
+    var sampleSize = parseInt(params.query.numberOfUsers) * 10;
     
     findResult = await this.options.Model.aggregate([
       { $match : keywordsearch }, // $text match only works, when on first place
@@ -421,14 +423,15 @@ exports.Tfollow = class Tfollow extends Service {
       ]}},
       { $addFields : { followRatio : { $divide: [ '$twUser.public_metrics.followers_count', '$twUser.public_metrics.following_count' ] } } },
       { $match : { followRatio: { $gte: followRatioResult }} },
-      { $sample: { size: parseInt(params.query.numberOfUsers) } }
+      { $sample: { size: sampleSize } }
     ]);
         
-    console.log('find - x150');
-    console.log('findResult: ');
-    console.log(findResult);
+    //console.log('findResult: ', findResult);
+    var findResultLength = findResult.length;
+    console.log('findResultLength: ', findResultLength);
     findResult = this._sortbyTweetsPerFollower(findResult, params.query.sortByRatioTweetsFollowers);
     findResult = this._sortByInHowMuchSelectedFollowedUsers(findResult, params.query.sortByInHowMuchSelectedFollowedUsers);
+    findResult = findResult.slice(0, parseInt(params.query.numberOfUsers));
     return findResult;
   }
   _sortbyTweetsPerFollower(findResult, sortByRatioTweetsFollowers) {
